@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      CoopLedger — Transparence Blockchain pour les Coopératives Agricoles
+      Togolaises
+    </title>
+    <meta
+      name="description"
+      content="CoopLedger utilise la blockchain pour garantir la transparence financière des coopératives agricoles au Togo. Projet T-02 — MIABE Hackathon 2026."
+    />
+    <link rel="stylesheet" href="coopledger.css" />
+  </head>
+  <body>
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav>
+      <div class="container">
+        <div class="nav-inner">
+          <div class="nav-logo">
+            <div class="nav-logo-mark">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                stroke-width="2"
+              >
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+              </svg>
+            </div>
+            <span class="nav-brand">Coop<span>Ledger</span></span>
+          </div>
+          <ul class="nav-links">
+            <li><a href="#probleme">Problème</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#interface">Interface</a></li>
+            <li><a href="#blockchain">Blockchain</a></li>
+            <li><a href="#impact">Impact</a></li>
+          </ul>
+          <div class="nav-badge">MIABE 2026 · T-02</div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <div class="hero-text">
+            <div class="hero-eyebrow">
+              🇹🇬 Togo · Agriculture &amp; Traçabilité · Projet T-02
+            </div>
+            <h1 class="hero-title">Coop<span>Ledger</span></h1>
+            <p class="hero-sub">
+              La transparence financière des coopératives agricoles togolaises,
+              garantie par la blockchain. Aucune transaction ne peut être
+              cachée. Aucun détournement ne peut rester dissimulé.
+            </p>
+            <div class="hero-tags">
+              <span class="hero-tag">ODD 1 — Fin de la pauvreté</span>
+              <span class="hero-tag">ODD 16 — Institutions efficaces</span>
+              <span class="hero-tag">ODD 17 — Partenariats</span>
+            </div>
+          </div>
+
+          <!-- Mini dashboard mockup -->
+          <div class="hero-mockup">
+            <div class="mock-topbar">
+              <span class="mock-topbar-title"
+                >CoopLedger — Coopérative Agri-Kara</span
+              >
+              <div class="mock-topbar-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+            <div class="mock-content">
+              <div class="mock-metrics">
+                <div class="mock-metric">
+                  <div class="mock-metric-val">842 500</div>
+                  <div class="mock-metric-lbl">Solde (FCFA)</div>
+                </div>
+                <div class="mock-metric">
+                  <div class="mock-metric-val">127</div>
+                  <div class="mock-metric-lbl">Membres actifs</div>
+                </div>
+                <div class="mock-metric">
+                  <div class="mock-metric-val">98%</div>
+                  <div class="mock-metric-lbl">Participation</div>
+                </div>
+              </div>
+              <div class="mock-chart-area">
+                <div class="mock-chart-label">
+                  Répartition des dépenses — Mai 2026
+                </div>
+                <div class="mock-bar-row">
+                  <div style="flex: 4; background: #1d9e75"></div>
+                  <div style="flex: 2.5; background: #378add"></div>
+                  <div style="flex: 1.5; background: #ef9f27"></div>
+                  <div style="flex: 2; background: #d85a30"></div>
+                </div>
+                <div class="mock-legend">
+                  <span class="mock-legend-item"
+                    ><span class="legend-dot" style="background: #1d9e75"></span
+                    >Intrants 40%</span
+                  >
+                  <span class="mock-legend-item"
+                    ><span class="legend-dot" style="background: #378add"></span
+                    >Primes 25%</span
+                  >
+                  <span class="mock-legend-item"
+                    ><span class="legend-dot" style="background: #ef9f27"></span
+                    >Frais 15%</span
+                  >
+                  <span class="mock-legend-item"
+                    ><span class="legend-dot" style="background: #d85a30"></span
+                    >Autres 20%</span
+                  >
+                </div>
+              </div>
+              <div class="mock-tx-list">
+                <div class="mock-tx-item">
+                  <div>
+                    <div class="mock-tx-name">Cotisation mensuelle</div>
+                    <div class="mock-tx-hash">0x4a3f...c12e · 17 Avr 2026</div>
+                  </div>
+                  <div class="mock-tx-in">+127 000</div>
+                </div>
+                <div class="mock-tx-item">
+                  <div>
+                    <div class="mock-tx-name">Achat intrants — Marché Kara</div>
+                    <div class="mock-tx-hash">0x9b2d...f87a · 12 Avr 2026</div>
+                  </div>
+                  <div class="mock-tx-out">−95 000</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PROBLÈME EN CHIFFRES ==================== -->
+    <section class="section" id="probleme">
+      <div class="container">
+        <div class="section-label">Le problème</div>
+        <h2 class="section-heading">La gouvernance opaque des coopératives</h2>
+        <p class="section-lead">
+          Au Togo, la majorité des coopératives agricoles gèrent des fonds
+          collectifs importants sans aucune transparence. Les conséquences sont
+          mesurables.
+        </p>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-num">60%</div>
+            <div class="stat-label">
+              des coopératives togolaises tiennent leur comptabilité uniquement
+              sur papier
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">15–20%</div>
+            <div class="stat-label">
+              des fonds collectifs font l'objet de détournements documentés
+              chaque année
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">70%</div>
+            <div class="stat-label">
+              des membres citent le manque de transparence comme principale
+              raison de méfiance
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">×3</div>
+            <div class="stat-label">
+              plus de financement externe pour les coopératives transparentes —
+              IFAD, 2022
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem">
+          <div class="problem-block">
+            <p>
+              Les membres d'une coopérative agricole togolaise n'ont
+              <strong>aucun moyen de vérifier</strong>
+              que les fonds collectifs sont correctement gérés. Chaque
+              transaction — cotisation, achat d'intrant, prime distribuée —
+              devrait être visible par tous, mais ce n'est pas le cas. La
+              gouvernance opaque brise la confiance, décourage les membres et
+              ferme l'accès aux financements institutionnels.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SOLUTION ==================== -->
+    <section class="section section-alt" id="solution">
+      <div class="container">
+        <div class="section-label">La solution</div>
+        <h2 class="section-heading">Ce que CoopLedger accomplit</h2>
+        <p class="section-lead">
+          Une plateforme web et mobile qui rend la gestion financière de chaque
+          coopérative 100% transparente, vérifiable et participative.
+        </p>
+        <div class="solution-grid">
+          <div class="sol-card">
+            <div class="sol-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#0F6E56"
+                stroke-width="2"
+              >
+                <path d="M9 12l2 2 4-4" />
+                <rect x="3" y="3" width="18" height="18" rx="3" />
+              </svg>
+            </div>
+            <h3>Registre immuable</h3>
+            <p>
+              Toutes les entrées et sorties financières sont enregistrées sur
+              une blockchain. Personne — pas même le trésorier — ne peut les
+              modifier ou les effacer.
+            </p>
+          </div>
+          <div class="sol-card">
+            <div class="sol-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#0F6E56"
+                stroke-width="2"
+              >
+                <rect x="5" y="2" width="14" height="20" rx="2" />
+                <line x1="9" y1="7" x2="15" y2="7" />
+                <line x1="9" y1="11" x2="15" y2="11" />
+                <line x1="9" y1="15" x2="12" y2="15" />
+              </svg>
+            </div>
+            <h3>Consultation mobile</h3>
+            <p>
+              Chaque membre consulte le solde, l'historique complet et la
+              répartition des dépenses depuis son téléphone, en temps réel.
+            </p>
+          </div>
+          <div class="sol-card">
+            <div class="sol-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#0F6E56"
+                stroke-width="2"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <h3>Vote transparent</h3>
+            <p>
+              Les décisions financières dépassant un seuil défini sont soumises
+              au vote des membres via un smart contract qui s'exécute
+              automatiquement.
+            </p>
+          </div>
+          <div class="sol-card">
+            <div class="sol-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#0F6E56"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="8" y1="13" x2="16" y2="13" />
+                <line x1="8" y1="17" x2="13" y2="17" />
+              </svg>
+            </div>
+            <h3>Rapport mensuel automatique</h3>
+            <p>
+              Un rapport de transparence est généré automatiquement depuis les
+              données blockchain chaque mois et partagé avec tous les membres et
+              partenaires.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== INTERFACE (MAQUETTES) ==================== -->
+    <section class="section" id="interface">
+      <div class="container">
+        <div class="section-label">Interface</div>
+        <h2 class="section-heading">Aperçu des maquettes</h2>
+        <p class="section-lead">
+          Trois écrans principaux permettent à chaque membre de consulter,
+          participer et vérifier la gestion financière de sa coopérative.
+        </p>
+
+        <div class="mockup-wrapper">
+          <div class="mockup-tabs">
+            <button
+              class="mock-tab active"
+              onclick="showMock('dashboard', this)"
+            >
+              Tableau de bord
+            </button>
+            <button class="mock-tab" onclick="showMock('vote', this)">
+              Écran de vote
+            </button>
+            <button class="mock-tab" onclick="showMock('history', this)">
+              Historique
+            </button>
+          </div>
+
+          <!-- Dashboard -->
+          <div class="mockup-screen active" id="mock-dashboard">
+            <div class="mock-window">
+              <div class="mock-window-header">
+                <span class="mock-window-title"
+                  >CoopLedger — Coopérative Agri-Kara</span
+                >
+                <span class="mock-window-sub"
+                  >Membre: Jean-Claude NYALEDOME</span
+                >
+              </div>
+              <div class="mock-window-body">
+                <div class="mock-metrics-row">
+                  <div class="mini-metric">
+                    <div class="mini-metric-val">842 500</div>
+                    <div class="mini-metric-lbl">Solde (FCFA)</div>
+                  </div>
+                  <div class="mini-metric">
+                    <div class="mini-metric-val">127</div>
+                    <div class="mini-metric-lbl">Membres actifs</div>
+                  </div>
+                  <div class="mini-metric">
+                    <div class="mini-metric-val">98%</div>
+                    <div class="mini-metric-lbl">Participation</div>
+                  </div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-card-label">
+                    Répartition des dépenses — Mai 2026
+                  </div>
+                  <div class="stacked-bar">
+                    <div style="flex: 4; background: #1d9e75"></div>
+                    <div style="flex: 2.5; background: #378add"></div>
+                    <div style="flex: 1.5; background: #ef9f27"></div>
+                    <div style="flex: 2; background: #d85a30"></div>
+                  </div>
+                  <div class="legend-row">
+                    <span class="legend-item"
+                      ><span
+                        class="legend-swatch"
+                        style="background: #1d9e75"
+                      ></span
+                      >Intrants 40%</span
+                    >
+                    <span class="legend-item"
+                      ><span
+                        class="legend-swatch"
+                        style="background: #378add"
+                      ></span
+                      >Primes 25%</span
+                    >
+                    <span class="legend-item"
+                      ><span
+                        class="legend-swatch"
+                        style="background: #ef9f27"
+                      ></span
+                      >Frais 15%</span
+                    >
+                    <span class="legend-item"
+                      ><span
+                        class="legend-swatch"
+                        style="background: #d85a30"
+                      ></span
+                      >Autres 20%</span
+                    >
+                  </div>
+                </div>
+                <div class="tx-list">
+                  <div class="tx-item">
+                    <div>
+                      <div class="tx-info-name">
+                        Cotisation mensuelle — 127 membres
+                      </div>
+                      <div class="tx-info-hash">
+                        0x4a3f...c12e · 17 Avr 2026
+                      </div>
+                    </div>
+                    <div class="tx-amount-in">+127 000 FCFA</div>
+                  </div>
+                  <div class="tx-item">
+                    <div>
+                      <div class="tx-info-name">
+                        Achat intrants — Marché de Kara
+                      </div>
+                      <div class="tx-info-hash">
+                        0x9b2d...f87a · 12 Avr 2026
+                      </div>
+                    </div>
+                    <div class="tx-amount-out">−95 000 FCFA</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vote -->
+          <div class="mockup-screen" id="mock-vote">
+            <div class="mock-window">
+              <div class="mock-window-header">
+                <span class="mock-window-title">Votes en cours</span>
+                <span
+                  class="mock-window-sub"
+                  style="
+                    background: rgba(255, 255, 255, 0.2);
+                    padding: 2px 10px;
+                    border-radius: 10px;
+                  "
+                  >2 actifs</span
+                >
+              </div>
+              <div class="mock-window-body">
+                <div class="vote-card">
+                  <span class="vote-badge vote-badge-active"
+                    >Vote actif — expire dans 3 jours</span
+                  >
+                  <div class="vote-title">
+                    Achat groupé d'engrais — 250 000 FCFA
+                  </div>
+                  <div class="vote-bar-bg">
+                    <div class="vote-bar-fill" style="width: 74%"></div>
+                  </div>
+                  <div class="vote-stats">
+                    <span>74% Pour (94 votes)</span
+                    ><span>26% Contre (33 votes)</span>
+                  </div>
+                  <div class="vote-actions">
+                    <button class="btn-pour">Voter Pour</button>
+                    <button class="btn-contre">Voter Contre</button>
+                  </div>
+                </div>
+                <div class="vote-card">
+                  <span class="vote-badge vote-badge-blue"
+                    >Vote actif — expire dans 7 jours</span
+                  >
+                  <div class="vote-title">Admission de 5 nouveaux membres</div>
+                  <div class="vote-bar-bg">
+                    <div
+                      class="vote-bar-fill vote-bar-fill-blue"
+                      style="width: 88%"
+                    ></div>
+                  </div>
+                  <div class="vote-stats">
+                    <span>88% Pour (112 votes)</span
+                    ><span>12% Contre (15 votes)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historique -->
+          <div class="mockup-screen" id="mock-history">
+            <div class="mock-window">
+              <div class="mock-window-header">
+                <span class="mock-window-title"
+                  >Historique des transactions</span
+                >
+                <span class="mock-window-sub"
+                  >Vérifiables sur la blockchain</span
+                >
+              </div>
+              <div class="mock-window-body">
+                <div class="tx-list">
+                  <div class="tx-item">
+                    <div>
+                      <div class="tx-info-name">
+                        Cotisation mensuelle — 127 membres
+                      </div>
+                      <div class="tx-info-hash">
+                        0x4a3f2e1b9c8d5f7a3e2b1c9d8e7f6a5b · 17 Avr 2026
+                      </div>
+                    </div>
+                    <div class="tx-amount-in">+127 000 FCFA</div>
+                  </div>
+                  <div class="tx-item">
+                    <div>
+                      <div class="tx-info-name">
+                        Achat intrants — Marché de Kara
+                      </div>
+                      <div class="tx-info-hash">
+                        0x9b2d7f3a1c4e8b6d2f9a3c7e1b5d4f8a · 12 Avr 2026
+                      </div>
+                    </div>
+                    <div class="tx-amount-out">−95 000 FCFA</div>
+                  </div>
+                  <div class="tx-item">
+                    <div>
+                      <div class="tx-info-name">
+                        Prime de vente — récolte maïs
+                      </div>
+                      <div class="tx-info-hash">
+                        0x2e7c4b1f9a3d6c8e2b7f4a1d9c3e6b8f · 5 Avr 2026
+                      </div>
+                    </div>
+                    <div class="tx-amount-in">+340 000 FCFA</div>
+                  </div>
+                  <div class="tx-item">
+                    <div>
+                      <div class="tx-info-name">Frais de transport groupé</div>
+                      <div class="tx-info-hash">
+                        0x1f4a9c2e7b5d3f8a6c1e4b9d2f7a3c5e · 1 Avr 2026
+                      </div>
+                    </div>
+                    <div class="tx-amount-out">−22 500 FCFA</div>
+                  </div>
+                  <div class="tx-item">
+                    <div>
+                      <div class="tx-info-name">Subvention IFAD — Q1 2026</div>
+                      <div class="tx-info-hash">
+                        0x7d3f1a9c5e2b8d4f7a1c3e9b5d2f8a6c · 28 Mar 2026
+                      </div>
+                    </div>
+                    <div class="tx-amount-in">+500 000 FCFA</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BLOCKCHAIN ==================== -->
+    <section class="section section-alt" id="blockchain">
+      <div class="container">
+        <div class="section-label">Composante blockchain</div>
+        <h2 class="section-heading">Pourquoi la blockchain ?</h2>
+        <p class="section-lead">
+          La blockchain n'est pas un choix technologique arbitraire — c'est la
+          seule solution qui garantit mathématiquement qu'aucune donnée ne peut
+          être falsifiée.
+        </p>
+
+        <div class="blockchain-panel">
+          <div class="bc-header">
+            <h3>La confiance sans intermédiaire</h3>
+            <p>
+              Aucune autorité centrale ne peut modifier ou effacer un
+              enregistrement une fois validé
+            </p>
+          </div>
+          <div class="bc-body">
+            <div class="bc-cards">
+              <div class="bc-card">
+                <h4>Immuabilité</h4>
+                <p>
+                  Une fois validée, une transaction ne peut plus être modifiée —
+                  même par le trésorier ou le président de la coopérative.
+                </p>
+              </div>
+              <div class="bc-card">
+                <h4>Transparence totale</h4>
+                <p>
+                  Tous les membres et partenaires accèdent en temps réel à
+                  l'intégralité des mouvements financiers.
+                </p>
+              </div>
+              <div class="bc-card">
+                <h4>Smart contracts</h4>
+                <p>
+                  Les règles de vote et les seuils financiers sont encodés dans
+                  un contrat qui s'exécute automatiquement, sans contournement
+                  possible.
+                </p>
+              </div>
+              <div class="bc-card">
+                <h4>Auditabilité</h4>
+                <p>
+                  Chaque transaction porte un hash cryptographique unique et un
+                  horodatage — la traçabilité est complète et vérifiable.
+                </p>
+              </div>
+            </div>
+
+            <div class="vs-grid">
+              <div class="vs-box vs-bad">
+                <h4>Solution centralisée (base de données classique)</h4>
+                <ul>
+                  <li>Base de données modifiable par l'administrateur</li>
+                  <li>Risque de suppression ou modification d'entrées</li>
+                  <li>La confiance dépend d'une seule personne</li>
+                  <li>Aucune preuve vérifiable en cas de litige</li>
+                  <li>
+                    Données accessibles uniquement à ceux qui ont les droits
+                  </li>
+                </ul>
+              </div>
+              <div class="vs-box vs-good">
+                <h4>CoopLedger (blockchain)</h4>
+                <ul>
+                  <li>Registre distribué, immuable et décentralisé</li>
+                  <li>Aucune suppression ou modification possible</li>
+                  <li>Confiance garantie mathématiquement</li>
+                  <li>Preuve cryptographique de chaque transaction</li>
+                  <li>Accessible à tous les membres en temps réel</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PoA Box -->
+        <div class="bc-poa-box">
+          <div class="bc-poa-title">
+            Choix du consensus : Proof of Authority (PoA)
+          </div>
+          <div class="bc-poa-grid">
+            <div class="bc-poa-item">
+              <span class="bc-poa-icon">&#9889;</span
+              ><strong>Faible consommation</strong><br />Pas de minage
+              énergivore
+            </div>
+            <div class="bc-poa-item">
+              <span class="bc-poa-icon">&#9201;</span
+              ><strong>Transactions rapides</strong><br />Confirmation en
+              quelques secondes
+            </div>
+            <div class="bc-poa-item">
+              <span class="bc-poa-icon">&#128176;</span><strong>Coût nul</strong
+              ><br />Pas de frais de gas pour les coopératives
+            </div>
+            <div class="bc-poa-item">
+              <span class="bc-poa-icon">&#127758;</span
+              ><strong>Adapté Togo</strong><br />Fonctionne sur connexions 2G/3G
+            </div>
+          </div>
+        </div>
+
+        <!-- Enregistrement des transactions -->
+        <div class="bc-tech-block">
+          <h3 class="bc-tech-title">
+            Enregistrement des transactions sur la blockchain
+          </h3>
+          <p class="bc-tech-lead">
+            Chaque transaction est un objet signé cryptographiquement par deux
+            acteurs (trésorier + président) avant d'être soumis au réseau :
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>transaction.json</span><span class="code-lang">JSON</span>
+            </div>
+            <pre class="code-body">
+{
+  "tx_id"        : "0x4a3f2e1b9c8d5f7a3e2b1c9d8e7f6a5b",
+  "coop_id"      : "COOP-KARA-007",
+  "type"         : "DEPENSE",
+  "montant"      : 95000,
+  "devise"       : "FCFA",
+  "description"  : "Achat engrais NPK - Marché de Kara",
+  "signatures"   : [
+    { "role": "TRESORIER", "sig": "0xab12..." },
+    { "role": "PRESIDENT", "sig": "0xef56..." }
+  ],
+  "prev_hash"    : "0x9b2d7f3a1c4e8b6d...",
+  "block_num"    : 1847
+}</pre
+            >
+          </div>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <div class="flow-num">1</div>
+              <div class="flow-info">
+                <strong>Saisie</strong>
+                <p>Trésorier entre montant, catégorie, bénéficiaire</p>
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-num">2</div>
+              <div class="flow-info">
+                <strong>Double signature</strong>
+                <p>Président + Trésorier signent avec leur clé privée</p>
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-num">3</div>
+              <div class="flow-info">
+                <strong>Consensus PoA</strong>
+                <p>Bloc validé par les noeuds du réseau</p>
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-num">4</div>
+              <div class="flow-info">
+                <strong>Immuable</strong>
+                <p>Hash SHA-256 enregistré — non modifiable</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vote sur la blockchain -->
+        <div class="bc-tech-block">
+          <h3 class="bc-tech-title">
+            Vote sur la blockchain — Smart contract VoteManager
+          </h3>
+          <p class="bc-tech-lead">
+            Les règles de vote sont encodées en Solidity. Le résultat s'exécute
+            automatiquement — aucun humain ne peut l'altérer :
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <span>VoteManager.sol</span
+              ><span class="code-lang">Solidity</span>
+            </div>
+            <pre class="code-body">
+function voter(uint256 propId, bool pourOuContre) external {
+  require(!aVote[propId][msg.sender], "Membre a deja vote");
+  require(block.timestamp &lt; propositions[propId].deadline, "Vote expire");
+  aVote[propId][msg.sender] = true;
+  if (pourOuContre) propositions[propId].votePour++;
+  else              propositions[propId].voteContre++;
+}
+
+function cloturer(uint256 propId) external {
+  uint256 pct = (propositions[propId].votePour * 100) / total;
+  if (pct >= propositions[propId].seuilPourcentage) {
+    TransactionVault(vaultAddr).autoriser(propId); // AUTO-EXECUTION
+  }
+  // Si rejeté : bloqué automatiquement. Aucun contournement possible.
+}</pre
+            >
+          </div>
+          <div class="vote-flow-h">
+            <div class="vfh-step">
+              <span class="vfh-num">1</span><span>Proposition soumise</span>
+            </div>
+            <div class="vfh-arr">→</div>
+            <div class="vfh-step">
+              <span class="vfh-num">2</span><span>Contrat activé</span>
+            </div>
+            <div class="vfh-arr">→</div>
+            <div class="vfh-step">
+              <span class="vfh-num">3</span><span>Membres notifiés</span>
+            </div>
+            <div class="vfh-arr">→</div>
+            <div class="vfh-step">
+              <span class="vfh-num">4</span><span>Vote signé</span>
+            </div>
+            <div class="vfh-arr">→</div>
+            <div class="vfh-step vfh-green">
+              <span class="vfh-num">5</span><span>Exécution auto</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stack technique -->
+        <div class="bc-tech-block">
+          <h3 class="bc-tech-title">Stack technologique</h3>
+          <div class="stack-grid">
+            <div class="stack-layer">
+              <div class="stack-label">Interface</div>
+              <div class="stack-items">
+                <span class="stack-item si-blue">HTML/CSS/JS</span
+                ><span class="stack-item si-blue">React Native</span
+                ><span class="stack-item si-blue">USSD/SMS</span>
+              </div>
+            </div>
+            <div class="stack-layer">
+              <div class="stack-label">API</div>
+              <div class="stack-items">
+                <span class="stack-item si-purple">Node.js</span
+                ><span class="stack-item si-purple">Web3.js</span
+                ><span class="stack-item si-purple">REST API</span>
+              </div>
+            </div>
+            <div class="stack-layer">
+              <div class="stack-label">Smart contracts</div>
+              <div class="stack-items">
+                <span class="stack-item si-green">Solidity</span
+                ><span class="stack-item si-green">VoteManager</span
+                ><span class="stack-item si-green">TransactionVault</span
+                ><span class="stack-item si-green">ReportGenerator</span>
+              </div>
+            </div>
+            <div class="stack-layer">
+              <div class="stack-label">Blockchain</div>
+              <div class="stack-items">
+                <span class="stack-item si-dark">Hyperledger Besu</span
+                ><span class="stack-item si-dark">PoA Consensus</span
+                ><span class="stack-item si-dark">SHA-256</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== UTILISATEURS ==================== -->
+    <section class="section" id="utilisateurs">
+      <div class="container">
+        <div class="section-label">Utilisateurs finaux</div>
+        <h2 class="section-heading">Pour qui ?</h2>
+        <p class="section-lead">
+          CoopLedger sert l'ensemble de l'écosystème coopératif togolais.
+        </p>
+
+        <div class="users-grid">
+          <div class="user-card">
+            <div
+              class="user-avatar"
+              style="background: #e1f5ee; color: #085041"
+            >
+              M
+            </div>
+            <div>
+              <h4>Membres des coopératives</h4>
+              <p>
+                Consultent le solde et l'historique, participent aux votes
+                depuis leur téléphone.
+              </p>
+            </div>
+          </div>
+          <div class="user-card">
+            <div
+              class="user-avatar"
+              style="background: #eeedfe; color: #26215c"
+            >
+              PT
+            </div>
+            <div>
+              <h4>Présidents &amp; Trésoriers</h4>
+              <p>
+                Enregistrent les transactions, soumettent les décisions au vote,
+                génèrent les rapports.
+              </p>
+            </div>
+          </div>
+          <div class="user-card">
+            <div
+              class="user-avatar"
+              style="background: #e6f1fb; color: #0c447c"
+            >
+              PF
+            </div>
+            <div>
+              <h4>Partenaires financiers</h4>
+              <p>
+                IFAD, banques agricoles et microfinance vérifient la
+                transparence avant financement.
+              </p>
+            </div>
+          </div>
+          <div class="user-card">
+            <div
+              class="user-avatar"
+              style="background: #faeeda; color: #633806"
+            >
+              MA
+            </div>
+            <div>
+              <h4>Ministère de l'Agriculture</h4>
+              <p>
+                Accède aux rapports agrégés pour le suivi des politiques
+                agricoles nationales.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== IMPACT ==================== -->
+    <section class="section section-alt" id="impact">
+      <div class="container">
+        <div class="section-label">Impact attendu</div>
+        <h2 class="section-heading">Transformer la gouvernance agricole</h2>
+        <p class="section-lead">
+          CoopLedger ne résout pas seulement un problème de comptabilité — il
+          transforme la relation de confiance entre membres, coopératives et
+          financeurs.
+        </p>
+
+        <div class="impact-grid">
+          <div class="impact-card">
+            <div class="impact-icon" style="background: #e1f5ee">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#0F6E56"
+                stroke-width="2"
+              >
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+            </div>
+            <h4>3× plus de financements</h4>
+            <p>
+              Les coopératives transparentes accèdent à des fonds
+              institutionnels aujourd'hui refusés (IFAD, 2022)
+            </p>
+          </div>
+          <div class="impact-card">
+            <div class="impact-icon" style="background: #e6f1fb">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#185FA5"
+                stroke-width="2"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <h4>Confiance restaurée</h4>
+            <p>
+              Les membres s'impliquent davantage quand ils peuvent vérifier
+              chaque mouvement de fonds
+            </p>
+          </div>
+          <div class="impact-card">
+            <div class="impact-icon" style="background: #faeeda">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#854F0B"
+                stroke-width="2"
+              >
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <h4>Revenus +30 à 50%</h4>
+            <p>
+              Pour un agriculteur dans une coopérative bien gouvernée grâce aux
+              achats groupés d'intrants
+            </p>
+          </div>
+          <div class="impact-card">
+            <div class="impact-icon" style="background: #eeedfe">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#534AB7"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <h4>Détournements impossibles</h4>
+            <p>
+              La blockchain rend toute tentative de fraude immédiatement visible
+              par tous les membres
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+      <div class="container">
+        <div class="footer-logo">Coop<span>Ledger</span></div>
+        <div class="footer-sub">
+          MIABE Hackathon 2026 · Projet T-02 · Agriculture &amp; Traçabilité ·
+          Togo
+        </div>
+        <div class="footer-tags">
+          <span class="footer-tag">ODD 1 — Fin de la pauvreté</span>
+          <span class="footer-tag">ODD 16 — Institutions efficaces</span>
+          <span class="footer-tag">ODD 17 — Partenariats</span>
+          <span class="footer-tag">Blockchain</span>
+          <span class="footer-tag">Smart Contracts</span>
+        </div>
+        <div class="footer-copy">
+          Darollo Technologies Corporation · www.miabehackathon.com · La
+          Blockchain, levier du développement durable africain
+        </div>
+      </div>
+    </footer>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+      function showMock(name, btn) {
+        document
+          .querySelectorAll(".mockup-screen")
+          .forEach((el) => el.classList.remove("active"));
+        document
+          .querySelectorAll(".mock-tab")
+          .forEach((el) => el.classList.remove("active"));
+        document.getElementById("mock-" + name).classList.add("active");
+        btn.classList.add("active");
+      }
+    </script>
+  </body>
+</html>
