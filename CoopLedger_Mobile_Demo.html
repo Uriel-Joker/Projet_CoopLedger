@@ -1,0 +1,3277 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoopLedger — Application Mobile & Démo Live</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --g0: #041a13;
+        --g1: #063324;
+        --g2: #0a4d36;
+        --g3: #0f6e50;
+        --g4: #18a373;
+        --g5: #2dd4a0;
+        --g6: #7ef0cb;
+        --g-pale: #e0faf3;
+        --orange: #e8603a;
+        --orange-pale: #fff1ec;
+        --purple: #5b4fcf;
+        --purple-pale: #f0eeff;
+        --purple-mid: #7b71e0;
+        --amber: #d4960f;
+        --amber-pale: #fffbec;
+        --red: #d63c3c;
+        --red-pale: #fff0f0;
+        --blue: #2d7dd2;
+        --blue-pale: #edf4ff;
+        --bg: #f4f3ef;
+        --surface: #fff;
+        --border: rgba(0, 0, 0, 0.08);
+        --border2: rgba(0, 0, 0, 0.14);
+        --text: #14140f;
+        --text2: #5a5852;
+        --text3: #9a9890;
+        --font: "Instrument Sans", sans-serif;
+        --display: "Syne", sans-serif;
+        --mono: "DM Mono", monospace;
+        --r: 12px;
+        --r2: 18px;
+        --r3: 24px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      button {
+        font-family: var(--font);
+        cursor: pointer;
+        border: none;
+        background: none;
+      }
+      input,
+      select {
+        font-family: var(--font);
+        outline: none;
+      }
+
+      /* ── PAGE LAYOUT ───────────────────────────────────────── */
+      .page-header {
+        background: var(--g0);
+        color: white;
+        padding: 3rem 2rem 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .page-header::before {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.03);
+      }
+      .page-header::after {
+        content: "";
+        position: absolute;
+        bottom: -80px;
+        left: -80px;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .ph-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 11px;
+        padding: 4px 14px;
+        border-radius: 20px;
+        margin-bottom: 1rem;
+        border: 0.5px solid rgba(255, 255, 255, 0.15);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .ph-title {
+        font-family: var(--display);
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+      }
+      .ph-title span {
+        color: var(--g5);
+      }
+      .ph-sub {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 560px;
+        margin: 0 auto 1.5rem;
+        line-height: 1.6;
+      }
+      .ph-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        position: relative;
+        z-index: 1;
+      }
+      .ph-tab {
+        font-size: 13px;
+        padding: 8px 20px;
+        border-radius: 20px;
+        border: 0.5px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.6);
+        transition: all 0.2s;
+        font-weight: 500;
+      }
+      .ph-tab:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .ph-tab.active {
+        background: var(--g3);
+        color: white;
+        border-color: var(--g3);
+      }
+
+      .page-section {
+        display: none;
+        padding: 2rem;
+      }
+      .page-section.active {
+        display: block;
+      }
+
+      /* ═══════════════════════════════════════════════════════════
+   SECTION 1 — APPLICATION MOBILE
+═══════════════════════════════════════════════════════════ */
+      .mobile-layout {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 3rem;
+        align-items: start;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Phone frame */
+      .phone-wrap {
+        display: flex;
+        justify-content: center;
+        position: sticky;
+        top: 2rem;
+      }
+      .phone-frame {
+        width: 320px;
+        background: #1a1a18;
+        border-radius: 40px;
+        padding: 12px;
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.35),
+          0 0 0 1px rgba(255, 255, 255, 0.08),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        position: relative;
+      }
+      .phone-notch {
+        width: 100px;
+        height: 28px;
+        background: #1a1a18;
+        border-radius: 0 0 18px 18px;
+        margin: 0 auto 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .phone-camera {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #2a2a28;
+        border: 2px solid #333;
+      }
+      .phone-screen {
+        background: #f4f3ef;
+        border-radius: 28px;
+        overflow: hidden;
+        height: 620px;
+        position: relative;
+      }
+      .phone-vol {
+        position: absolute;
+        left: -14px;
+        top: 80px;
+        width: 5px;
+        height: 40px;
+        background: #2a2a28;
+        border-radius: 3px 0 0 3px;
+      }
+      .phone-vol2 {
+        position: absolute;
+        left: -14px;
+        top: 130px;
+        width: 5px;
+        height: 40px;
+        background: #2a2a28;
+        border-radius: 3px 0 0 3px;
+      }
+      .phone-power {
+        position: absolute;
+        right: -14px;
+        top: 100px;
+        width: 5px;
+        height: 55px;
+        background: #2a2a28;
+        border-radius: 0 3px 3px 0;
+      }
+
+      /* Mobile screens */
+      .mobile-screen {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        transition: all 0.3s;
+      }
+      .mobile-screen.active {
+        display: flex;
+      }
+
+      /* Mobile topbar */
+      .mob-topbar {
+        background: var(--g0);
+        color: white;
+        padding: 12px 16px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .mob-logo {
+        font-family: var(--display);
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+      }
+      .mob-logo span {
+        color: var(--g5);
+      }
+      .mob-notif {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .mob-notif svg {
+        width: 14px;
+        height: 14px;
+      }
+      .mob-notif-dot {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--orange);
+        border: 1.5px solid var(--g0);
+      }
+
+      /* Mobile scrollable content */
+      .mob-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+        background: var(--bg);
+      }
+      .mob-content::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Mobile hero balance */
+      .mob-balance {
+        background: linear-gradient(135deg, var(--g0) 0%, var(--g2) 100%);
+        padding: 1.25rem 1.25rem 1.5rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+      .mob-balance::after {
+        content: "";
+        position: absolute;
+        bottom: -30px;
+        right: -30px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .mob-bal-lbl {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .mob-bal-val {
+        font-family: var(--display);
+        font-size: 30px;
+        font-weight: 800;
+        color: white;
+        line-height: 1;
+        margin-bottom: 2px;
+      }
+      .mob-bal-sub {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .mob-bal-change {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 8px;
+        background: rgba(45, 212, 160, 0.2);
+        color: var(--g5);
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 20px;
+      }
+      .mob-quick {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        padding: 14px 12px;
+      }
+      .mob-qbtn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        background: var(--surface);
+        border-radius: var(--r);
+        padding: 10px 6px;
+        border: 0.5px solid var(--border);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .mob-qbtn:hover {
+        border-color: var(--g4);
+        transform: translateY(-1px);
+      }
+      .mob-qbtn-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2px;
+      }
+      .mob-qbtn-icon svg {
+        width: 16px;
+        height: 16px;
+      }
+      .mob-qbtn-lbl {
+        font-size: 10px;
+        color: var(--text2);
+        text-align: center;
+        font-weight: 500;
+      }
+
+      .mob-section-title {
+        font-family: var(--display);
+        font-size: 13px;
+        font-weight: 600;
+        padding: 0 12px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .mob-see-all {
+        font-size: 11px;
+        color: var(--g3);
+        font-weight: 500;
+      }
+
+      /* Mobile vote pills */
+      .mob-vote-pill {
+        margin: 0 12px 8px;
+        background: var(--surface);
+        border-radius: var(--r2);
+        padding: 12px 14px;
+        border: 0.5px solid var(--border);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .mob-vote-pill:hover {
+        border-color: var(--g4);
+      }
+      .mob-vp-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      .mob-vp-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.3;
+        flex: 1;
+        margin-right: 8px;
+      }
+      .mob-vp-badge {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+      .mob-vp-urgent {
+        background: var(--orange-pale);
+        color: var(--orange);
+      }
+      .mob-vp-ok {
+        background: var(--g-pale);
+        color: var(--g2);
+      }
+      .mob-vp-bar {
+        height: 6px;
+        background: #eceae4;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 4px;
+      }
+      .mob-vp-fill {
+        height: 100%;
+        border-radius: 20px;
+      }
+      .mob-vp-stats {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        color: var(--text3);
+      }
+      .mob-vp-actions {
+        display: flex;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .mob-btn-v {
+        flex: 1;
+        padding: 6px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 600;
+        font-family: var(--font);
+        cursor: pointer;
+        border: none;
+        transition: all 0.15s;
+      }
+      .mb-pour {
+        background: var(--g-pale);
+        color: var(--g2);
+      }
+      .mb-contre {
+        background: var(--orange-pale);
+        color: var(--orange);
+      }
+      .mb-voted {
+        background: #eceae4;
+        color: var(--text3);
+        flex: 1;
+        padding: 6px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-family: var(--font);
+      }
+
+      /* Mobile transactions */
+      .mob-tx {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-bottom: 0.5px solid var(--border);
+        background: var(--surface);
+        cursor: pointer;
+      }
+      .mob-tx:hover {
+        background: var(--bg);
+      }
+      .mob-tx-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .mob-tx-icon svg {
+        width: 14px;
+        height: 14px;
+      }
+      .mti-in {
+        background: var(--g-pale);
+      }
+      .mti-in svg {
+        stroke: var(--g3);
+      }
+      .mti-out {
+        background: var(--orange-pale);
+      }
+      .mti-out svg {
+        stroke: var(--orange);
+      }
+      .mob-tx-info {
+        flex: 1;
+      }
+      .mob-tx-name {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text);
+      }
+      .mob-tx-date {
+        font-size: 10px;
+        color: var(--text3);
+        font-family: var(--mono);
+      }
+      .mob-tx-amt {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .mob-tx-in {
+        color: var(--g3);
+      }
+      .mob-tx-out {
+        color: var(--orange);
+      }
+
+      /* Mobile bottom nav */
+      .mob-bottomnav {
+        background: var(--surface);
+        border-top: 0.5px solid var(--border);
+        display: flex;
+        flex-shrink: 0;
+      }
+      .mob-navitem {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 8px 4px;
+        cursor: pointer;
+        transition: all 0.15s;
+        position: relative;
+      }
+      .mob-navitem.active .mob-navicon {
+        background: var(--g-pale);
+      }
+      .mob-navitem.active .mob-navicon svg {
+        stroke: var(--g3);
+      }
+      .mob-navitem.active .mob-navlbl {
+        color: var(--g3);
+      }
+      .mob-navicon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+      .mob-navicon svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--text3);
+      }
+      .mob-navlbl {
+        font-size: 9px;
+        color: var(--text3);
+        font-weight: 500;
+      }
+      .mob-navbadge {
+        position: absolute;
+        top: 4px;
+        right: 20%;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--orange);
+        color: white;
+        font-size: 8px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Screen nav dots */
+      .screen-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 1.5rem;
+      }
+      .screen-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--border2);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .screen-dot.active {
+        background: var(--g3);
+        width: 20px;
+        border-radius: 4px;
+      }
+
+      /* Right: feature list */
+      .feature-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .feature-item {
+        background: var(--surface);
+        border-radius: var(--r2);
+        padding: 1.25rem;
+        border: 0.5px solid var(--border);
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+        cursor: pointer;
+      }
+      .feature-item:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+        transform: translateY(-2px);
+      }
+      .feature-item.highlighted {
+        border-color: var(--g4);
+        background: var(--g-pale);
+      }
+      .fi-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .fi-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      .fi-title {
+        font-family: var(--display);
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .fi-desc {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.5;
+      }
+      .fi-tag {
+        display: inline-block;
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        margin-top: 6px;
+        font-weight: 600;
+      }
+      .show-screen-btn {
+        font-size: 11px;
+        color: var(--g3);
+        font-weight: 600;
+        margin-top: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        font-family: var(--font);
+      }
+
+      /* ═══════════════════════════════════════════════════════════
+   SECTION 2 — DÉMO LIVE
+═══════════════════════════════════════════════════════════ */
+      .demo-layout {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .demo-intro {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .demo-intro h2 {
+        font-family: var(--display);
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .demo-intro p {
+        font-size: 15px;
+        color: var(--text2);
+        max-width: 560px;
+        margin: 0 auto;
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Transaction input panel */
+      .demo-panel {
+        background: var(--surface);
+        border-radius: var(--r2);
+        border: 0.5px solid var(--border);
+        overflow: hidden;
+      }
+      .dp-header {
+        padding: 1.25rem 1.5rem 1rem;
+        border-bottom: 0.5px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .dp-header-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .dp-header-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .dp-title {
+        font-family: var(--display);
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .dp-sub {
+        font-size: 11px;
+        color: var(--text3);
+      }
+      .dp-body {
+        padding: 1.25rem 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+      .form-label {
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text3);
+        margin-bottom: 4px;
+      }
+      .form-input,
+      .form-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 0.5px solid var(--border2);
+        border-radius: var(--r);
+        font-size: 13px;
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--text);
+        transition: border-color 0.15s;
+        outline: none;
+      }
+      .form-input:focus,
+      .form-select:focus {
+        border-color: var(--g3);
+        background: white;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .type-btns {
+        display: flex;
+        gap: 8px;
+      }
+      .type-btn {
+        flex: 1;
+        padding: 8px;
+        border-radius: var(--r);
+        font-size: 12px;
+        font-weight: 600;
+        border: 0.5px solid var(--border2);
+        background: var(--bg);
+        color: var(--text2);
+        transition: all 0.15s;
+        font-family: var(--font);
+      }
+      .type-btn.t-in {
+        background: var(--g-pale);
+        color: var(--g2);
+        border-color: var(--g4);
+      }
+      .type-btn.t-out {
+        background: var(--orange-pale);
+        color: var(--orange);
+        border-color: var(--orange);
+      }
+
+      .btn-broadcast {
+        width: 100%;
+        padding: 11px;
+        background: var(--g3);
+        color: white;
+        border-radius: var(--r);
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 4px;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-family: var(--font);
+      }
+      .btn-broadcast:hover {
+        background: var(--g4);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(15, 110, 80, 0.3);
+      }
+      .btn-broadcast svg {
+        width: 16px;
+        height: 16px;
+      }
+      .btn-broadcast.loading {
+        background: var(--g2);
+        pointer-events: none;
+      }
+
+      /* Blockchain visualization */
+      .chain-panel {
+        background: var(--g0);
+        border-radius: var(--r2);
+        overflow: hidden;
+      }
+      .chain-panel-head {
+        padding: 1.25rem 1.5rem 1rem;
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+      }
+      .cp-title {
+        font-family: var(--display);
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 3px;
+      }
+      .cp-sub {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .chain-panel-body {
+        padding: 1.25rem 1.5rem;
+      }
+
+      /* Block visualization */
+      .blocks-scroll {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-bottom: 1rem;
+      }
+      .blocks-scroll::-webkit-scrollbar {
+        height: 3px;
+      }
+      .blocks-scroll::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+      }
+      .blocks-scroll::-webkit-scrollbar-thumb {
+        background: var(--g3);
+        border-radius: 3px;
+      }
+
+      .block-chip {
+        flex-shrink: 0;
+        width: 120px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: var(--r);
+        padding: 10px;
+        border: 0.5px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s;
+        cursor: pointer;
+        position: relative;
+      }
+      .block-chip.new-block {
+        border-color: var(--g5);
+        background: rgba(45, 212, 160, 0.1);
+        animation: blockIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+      }
+      @keyframes blockIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8) translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateX(0);
+        }
+      }
+      .bc-num {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--g5);
+        margin-bottom: 4px;
+      }
+      .bc-hash {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.35);
+        margin-bottom: 4px;
+        word-break: break-all;
+      }
+      .bc-txcount {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .bc-time {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.25);
+        margin-top: 3px;
+      }
+      .bc-arrow {
+        color: rgba(255, 255, 255, 0.15);
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        align-self: center;
+        flex-shrink: 0;
+      }
+
+      /* Nodes */
+      .nodes-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-bottom: 1rem;
+      }
+      .node {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: var(--r);
+        padding: 8px;
+        text-align: center;
+        border: 0.5px solid rgba(255, 255, 255, 0.06);
+        transition: all 0.3s;
+      }
+      .node.validating {
+        border-color: var(--g5);
+        background: rgba(45, 212, 160, 0.1);
+      }
+      .node.validated {
+        border-color: var(--g4);
+        background: rgba(24, 163, 115, 0.1);
+      }
+      .node-icon {
+        font-size: 18px;
+        margin-bottom: 4px;
+      }
+      .node-name {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .node-status {
+        font-size: 9px;
+        font-weight: 600;
+        margin-top: 3px;
+      }
+      .ns-active {
+        color: var(--g5);
+      }
+      .ns-validating {
+        color: var(--amber);
+      }
+      .ns-validated {
+        color: var(--g4);
+      }
+
+      /* Propagation */
+      .prop-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        margin-bottom: 1rem;
+      }
+      .prop-item {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: var(--r);
+        padding: 8px 10px;
+        border: 0.5px solid rgba(255, 255, 255, 0.06);
+        transition: all 0.4s;
+      }
+      .prop-item.done {
+        border-color: var(--g5);
+        background: rgba(45, 212, 160, 0.08);
+      }
+      .prop-label {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.35);
+        margin-bottom: 3px;
+      }
+      .prop-val {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.6);
+        word-break: break-all;
+      }
+      .prop-val.highlight {
+        color: var(--g5);
+      }
+      .prop-check {
+        font-size: 12px;
+        margin-top: 3px;
+        opacity: 0;
+      }
+      .prop-item.done .prop-check {
+        opacity: 1;
+      }
+
+      /* Live feed */
+      .live-feed-section {
+        background: var(--surface);
+        border-radius: var(--r2);
+        border: 0.5px solid var(--border);
+        overflow: hidden;
+      }
+      .lf-header {
+        padding: 1.25rem 1.5rem 1rem;
+        border-bottom: 0.5px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .lf-title {
+        font-family: var(--display);
+        font-size: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .live-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--g4);
+        animation: pulse 1.5s ease infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(0.8);
+        }
+      }
+      .lf-members {
+        display: flex;
+        gap: 6px;
+      }
+      .lf-member {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 700;
+        color: white;
+      }
+      .lf-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 200px;
+      }
+
+      /* Member tiles */
+      .member-tile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 1.5rem;
+        border-bottom: 0.5px solid var(--border);
+        transition: background 0.2s;
+      }
+      .member-tile.updated {
+        background: var(--g-pale);
+        animation: flashGreen 1s ease forwards;
+      }
+      @keyframes flashGreen {
+        0% {
+          background: var(--g-pale);
+        }
+        100% {
+          background: transparent;
+        }
+      }
+      .mt-av {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: white;
+        flex-shrink: 0;
+      }
+      .mt-info {
+        flex: 1;
+      }
+      .mt-name {
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .mt-status {
+        font-size: 10px;
+        color: var(--text3);
+        font-family: var(--mono);
+      }
+      .mt-balance {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--g3);
+      }
+      .mt-sync {
+        font-size: 10px;
+        color: var(--text3);
+      }
+      .mt-sync.syncing {
+        color: var(--amber);
+      }
+      .mt-sync.synced {
+        color: var(--g3);
+      }
+
+      /* Steps indicator */
+      .steps-bar {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        margin-bottom: 1.5rem;
+        background: var(--surface);
+        border-radius: var(--r2);
+        padding: 1rem 1.5rem;
+        border: 0.5px solid var(--border);
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+      }
+      .step-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 0.5px solid var(--border2);
+        color: var(--text3);
+        font-size: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.3s;
+      }
+      .step.done .step-num {
+        background: var(--g3);
+        color: white;
+        border-color: var(--g3);
+      }
+      .step.active .step-num {
+        background: var(--amber);
+        color: white;
+        border-color: var(--amber);
+        animation: stepPulse 1s ease infinite;
+      }
+      @keyframes stepPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(212, 150, 15, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 0 6px rgba(212, 150, 15, 0);
+        }
+      }
+      .step-info {
+        flex: 1;
+      }
+      .step-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .step-sub {
+        font-size: 10px;
+        color: var(--text3);
+      }
+      .step-line {
+        width: 20px;
+        height: 1px;
+        background: var(--border2);
+        flex-shrink: 0;
+        margin: 0 4px;
+      }
+      .step.done .step-title {
+        color: var(--g3);
+      }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        background: var(--g0);
+        color: white;
+        border-radius: var(--r2);
+        padding: 1rem 1.25rem;
+        border: 0.5px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        min-width: 320px;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 1000;
+      }
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      .toast-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+      }
+      .toast-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--g5);
+        animation: pulse 1.5s infinite;
+      }
+      .toast-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: white;
+      }
+      .toast-body {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .toast-hash {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--g5);
+        margin-top: 4px;
+      }
+
+      @media (max-width: 900px) {
+        .mobile-layout,
+        .demo-grid {
+          grid-template-columns: 1fr;
+        }
+        .phone-wrap {
+          position: relative;
+          top: 0;
+        }
+        .lf-body {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="ph-badge">Phase 2 · MIABE Hackathon 2026 · Projet T-02</div>
+      <h1 class="ph-title">Coop<span>Ledger</span></h1>
+      <p class="ph-sub">
+        Application mobile pour les membres et démonstration live de la
+        blockchain en temps réel
+      </p>
+      <div class="ph-tabs">
+        <button class="ph-tab active" onclick="showSection('mobile', this)">
+          📱 Application mobile
+        </button>
+        <button class="ph-tab" onclick="showSection('demo', this)">
+          ⛓ Démo live blockchain
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════ SECTION MOBILE ══════════════ -->
+    <div class="page-section active" id="sec-mobile">
+      <div class="mobile-layout">
+        <!-- Phone -->
+        <div class="phone-wrap">
+          <div>
+            <div class="phone-frame">
+              <div class="phone-vol"></div>
+              <div class="phone-vol2"></div>
+              <div class="phone-power"></div>
+              <div class="phone-notch"><div class="phone-camera"></div></div>
+              <div class="phone-screen">
+                <!-- Screen 1 : Accueil -->
+                <div class="mobile-screen active" id="mob-home">
+                  <div class="mob-topbar">
+                    <div>
+                      <div class="mob-logo">Coop<span>Ledger</span></div>
+                      <div
+                        style="font-size: 9px; color: rgba(255, 255, 255, 0.4)"
+                      >
+                        Coopérative Agri-Kara
+                      </div>
+                    </div>
+                    <div class="mob-notif">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        stroke-width="2"
+                      >
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                      </svg>
+                      <div class="mob-notif-dot"></div>
+                    </div>
+                  </div>
+                  <div class="mob-content">
+                    <div class="mob-balance">
+                      <div class="mob-bal-lbl">Solde de la coopérative</div>
+                      <div class="mob-bal-val">842 500 FCFA</div>
+                      <div class="mob-bal-sub">
+                        Mis à jour il y a 2 minutes · Bloc #1847
+                      </div>
+                      <div class="mob-bal-change">↑ +12.4% ce mois</div>
+                    </div>
+                    <div class="mob-quick">
+                      <div
+                        class="mob-qbtn"
+                        onclick="showMobScreen('mob-history')"
+                      >
+                        <div class="mob-qbtn-icon" style="background: #e0faf3">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#0f6e50"
+                            stroke-width="2"
+                          >
+                            <line x1="8" y1="6" x2="21" y2="6" />
+                            <line x1="8" y1="12" x2="21" y2="12" />
+                            <line x1="8" y1="18" x2="21" y2="18" />
+                            <line x1="3" y1="6" x2="3.01" y2="6" />
+                          </svg>
+                        </div>
+                        <div class="mob-qbtn-lbl">Historique</div>
+                      </div>
+                      <div class="mob-qbtn" onclick="showMobScreen('mob-vote')">
+                        <div class="mob-qbtn-icon" style="background: #f0eeff">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#5b4fcf"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                            />
+                            <circle cx="9" cy="7" r="4" />
+                          </svg>
+                        </div>
+                        <div class="mob-qbtn-lbl">Voter</div>
+                      </div>
+                      <div class="mob-qbtn">
+                        <div class="mob-qbtn-icon" style="background: #fffbec">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#d4960f"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                            />
+                            <polyline points="14 2 14 8 20 8" />
+                          </svg>
+                        </div>
+                        <div class="mob-qbtn-lbl">Rapport</div>
+                      </div>
+                      <div class="mob-qbtn">
+                        <div class="mob-qbtn-icon" style="background: #edf4ff">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#2d7dd2"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                            />
+                          </svg>
+                        </div>
+                        <div class="mob-qbtn-lbl">Blockchain</div>
+                      </div>
+                    </div>
+                    <div class="mob-section-title">
+                      Votes actifs <span class="mob-see-all">Voir tout</span>
+                    </div>
+                    <div
+                      class="mob-vote-pill"
+                      onclick="showMobScreen('mob-vote')"
+                    >
+                      <div class="mob-vp-head">
+                        <div class="mob-vp-title">
+                          Achat groupé d'engrais NPK
+                        </div>
+                        <div class="mob-vp-badge mob-vp-urgent">⚡ 3j</div>
+                      </div>
+                      <div class="mob-vp-bar">
+                        <div
+                          class="mob-vp-fill"
+                          style="
+                            width: 74%;
+                            background: linear-gradient(
+                              90deg,
+                              #0f6e50,
+                              #2dd4a0
+                            );
+                          "
+                        ></div>
+                      </div>
+                      <div class="mob-vp-stats">
+                        <span>74% Pour</span><span>250 000 FCFA</span>
+                      </div>
+                      <div class="mob-vp-actions">
+                        <button class="mob-btn-v mb-pour">✓ Pour</button>
+                        <button class="mob-btn-v mb-contre">✗ Contre</button>
+                      </div>
+                    </div>
+                    <div class="mob-vote-pill">
+                      <div class="mob-vp-head">
+                        <div class="mob-vp-title">
+                          Admission 5 nouveaux membres
+                        </div>
+                        <div class="mob-vp-badge mob-vp-ok">7j</div>
+                      </div>
+                      <div class="mob-vp-bar">
+                        <div
+                          class="mob-vp-fill"
+                          style="
+                            width: 88%;
+                            background: linear-gradient(
+                              90deg,
+                              #0f6e50,
+                              #2dd4a0
+                            );
+                          "
+                        ></div>
+                      </div>
+                      <div class="mob-vp-stats">
+                        <span>88% Pour</span><span>127 votants</span>
+                      </div>
+                      <div class="mob-vp-actions">
+                        <button class="mob-btn-v mb-voted">
+                          ✓ Déjà voté Pour
+                        </button>
+                      </div>
+                    </div>
+                    <div class="mob-section-title" style="margin-top: 4px">
+                      Dernières transactions
+                      <span class="mob-see-all">Voir tout</span>
+                    </div>
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-in">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="19" x2="12" y2="5" />
+                          <polyline points="5 12 12 5 19 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Cotisation mensuelle</div>
+                        <div class="mob-tx-date">0x4a3f...c12e · 17 Avr</div>
+                      </div>
+                      <div class="mob-tx-amt mob-tx-in">+127k</div>
+                    </div>
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-out">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <polyline points="19 12 12 19 5 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Achat intrants Kara</div>
+                        <div class="mob-tx-date">0x9b2d...f87a · 12 Avr</div>
+                      </div>
+                      <div class="mob-tx-amt mob-tx-out">−95k</div>
+                    </div>
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-in">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="19" x2="12" y2="5" />
+                          <polyline points="5 12 12 5 19 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Prime vente maïs</div>
+                        <div class="mob-tx-date">0x2e7c...3b51 · 5 Avr</div>
+                      </div>
+                      <div class="mob-tx-amt mob-tx-in">+340k</div>
+                    </div>
+                    <div style="height: 12px"></div>
+                  </div>
+                  <div class="mob-bottomnav">
+                    <div class="mob-navitem active">
+                      <div class="mob-navicon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <rect x="3" y="3" width="7" height="7" />
+                          <rect x="14" y="3" width="7" height="7" />
+                          <rect x="14" y="14" width="7" height="7" />
+                          <rect x="3" y="14" width="7" height="7" />
+                        </svg>
+                      </div>
+                      <div class="mob-navlbl">Accueil</div>
+                    </div>
+                    <div
+                      class="mob-navitem"
+                      onclick="showMobScreen('mob-history')"
+                    >
+                      <div class="mob-navicon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="8" y1="6" x2="21" y2="6" />
+                          <line x1="8" y1="12" x2="21" y2="12" />
+                          <line x1="8" y1="18" x2="21" y2="18" />
+                        </svg>
+                      </div>
+                      <div class="mob-navlbl">Transactions</div>
+                    </div>
+                    <div
+                      class="mob-navitem"
+                      onclick="showMobScreen('mob-vote')"
+                    >
+                      <div class="mob-navicon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                          <circle cx="9" cy="7" r="4" />
+                        </svg>
+                      </div>
+                      <div class="mob-navlbl">Voter</div>
+                      <div class="mob-navbadge">2</div>
+                    </div>
+                    <div
+                      class="mob-navitem"
+                      onclick="showMobScreen('mob-profil')"
+                    >
+                      <div class="mob-navicon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <circle cx="12" cy="8" r="4" />
+                          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                        </svg>
+                      </div>
+                      <div class="mob-navlbl">Profil</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Screen 2 : Historique -->
+                <div class="mobile-screen" id="mob-history">
+                  <div
+                    class="mob-topbar"
+                    style="justify-content: flex-start; gap: 10px"
+                  >
+                    <button
+                      onclick="showMobScreen('mob-home')"
+                      style="
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        font-size: 13px;
+                        font-weight: 500;
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                      "
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        width="12"
+                        height="12"
+                      >
+                        <polyline points="15 18 9 12 15 6" />
+                      </svg>
+                      Retour
+                    </button>
+                    <div class="mob-logo" style="font-size: 14px">
+                      Transactions
+                    </div>
+                  </div>
+                  <div class="mob-content">
+                    <div
+                      style="
+                        padding: 10px 12px;
+                        background: var(--surface);
+                        border-bottom: 0.5px solid var(--border);
+                      "
+                    >
+                      <div style="display: flex; gap: 6px">
+                        <div
+                          style="
+                            flex: 1;
+                            background: var(--bg);
+                            border-radius: 20px;
+                            padding: 6px 12px;
+                            font-size: 11px;
+                            color: var(--text3);
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            border: 0.5px solid var(--border2);
+                          "
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            width="12"
+                            height="12"
+                          >
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                          </svg>
+                          Rechercher...
+                        </div>
+                        <div
+                          style="
+                            background: var(--g3);
+                            color: white;
+                            border-radius: 20px;
+                            padding: 6px 12px;
+                            font-size: 11px;
+                            font-weight: 600;
+                          "
+                        >
+                          Filtre
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        padding: 8px 12px 4px;
+                        font-size: 10px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.08em;
+                        color: var(--text3);
+                        font-weight: 600;
+                      "
+                    >
+                      Avril 2026
+                    </div>
+
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-in">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="19" x2="12" y2="5" />
+                          <polyline points="5 12 12 5 19 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Cotisation mensuelle</div>
+                        <div class="mob-tx-date">0x4a3f...c12e · 17 Avr</div>
+                      </div>
+                      <div>
+                        <div class="mob-tx-amt mob-tx-in">+127k</div>
+                        <div
+                          style="
+                            font-size: 9px;
+                            color: var(--text3);
+                            text-align: right;
+                          "
+                        >
+                          Cotisation
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-out">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <polyline points="19 12 12 19 5 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Achat intrants Kara</div>
+                        <div class="mob-tx-date">0x9b2d...f87a · 12 Avr</div>
+                      </div>
+                      <div>
+                        <div class="mob-tx-amt mob-tx-out">−95k</div>
+                        <div
+                          style="
+                            font-size: 9px;
+                            color: var(--text3);
+                            text-align: right;
+                          "
+                        >
+                          Intrants
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-in">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="19" x2="12" y2="5" />
+                          <polyline points="5 12 12 5 19 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Prime vente maïs</div>
+                        <div class="mob-tx-date">0x2e7c...3b51 · 5 Avr</div>
+                      </div>
+                      <div>
+                        <div class="mob-tx-amt mob-tx-in">+340k</div>
+                        <div
+                          style="
+                            font-size: 9px;
+                            color: var(--text3);
+                            text-align: right;
+                          "
+                        >
+                          Primes
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-out">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <polyline points="19 12 12 19 5 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Frais transport groupé</div>
+                        <div class="mob-tx-date">0x1f4a...7d92 · 1 Avr</div>
+                      </div>
+                      <div>
+                        <div class="mob-tx-amt mob-tx-out">−22k</div>
+                        <div
+                          style="
+                            font-size: 9px;
+                            color: var(--text3);
+                            text-align: right;
+                          "
+                        >
+                          Transport
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      style="
+                        padding: 8px 12px 4px;
+                        font-size: 10px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.08em;
+                        color: var(--text3);
+                        font-weight: 600;
+                      "
+                    >
+                      Mars 2026
+                    </div>
+
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-in">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="19" x2="12" y2="5" />
+                          <polyline points="5 12 12 5 19 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Subvention IFAD Q1</div>
+                        <div class="mob-tx-date">0x7d3f...8a6c · 28 Mar</div>
+                      </div>
+                      <div>
+                        <div class="mob-tx-amt mob-tx-in">+500k</div>
+                        <div
+                          style="
+                            font-size: 9px;
+                            color: var(--text3);
+                            text-align: right;
+                          "
+                        >
+                          Subvention
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mob-tx">
+                      <div class="mob-tx-icon mti-out">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <polyline points="19 12 12 19 5 12" />
+                        </svg>
+                      </div>
+                      <div class="mob-tx-info">
+                        <div class="mob-tx-name">Achat semences certif.</div>
+                        <div class="mob-tx-date">0x3c8a...2f1d · 24 Mar</div>
+                      </div>
+                      <div>
+                        <div class="mob-tx-amt mob-tx-out">−68k</div>
+                        <div
+                          style="
+                            font-size: 9px;
+                            color: var(--text3);
+                            text-align: right;
+                          "
+                        >
+                          Intrants
+                        </div>
+                      </div>
+                    </div>
+                    <div style="height: 12px"></div>
+                  </div>
+                </div>
+
+                <!-- Screen 3 : Vote mobile -->
+                <div class="mobile-screen" id="mob-vote">
+                  <div
+                    class="mob-topbar"
+                    style="justify-content: flex-start; gap: 10px"
+                  >
+                    <button
+                      onclick="showMobScreen('mob-home')"
+                      style="
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        font-size: 13px;
+                        font-weight: 500;
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                      "
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        width="12"
+                        height="12"
+                      >
+                        <polyline points="15 18 9 12 15 6" />
+                      </svg>
+                      Retour
+                    </button>
+                    <div class="mob-logo" style="font-size: 14px">
+                      Votes actifs
+                    </div>
+                  </div>
+                  <div class="mob-content">
+                    <div
+                      style="
+                        padding: 10px 12px;
+                        background: var(--g-pale);
+                        border-bottom: 0.5px solid #b0e8d4;
+                        font-size: 11px;
+                        color: var(--g2);
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                      "
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        width="14"
+                        height="14"
+                      >
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                      Les votes sont signés et enregistrés sur la blockchain
+                    </div>
+                    <div style="padding: 10px 12px 0">
+                      <div class="mob-vote-pill" style="margin: 0 0 10px">
+                        <div class="mob-vp-head">
+                          <div class="mob-vp-title">
+                            Achat groupé d'engrais NPK — 250 000 FCFA
+                          </div>
+                          <div class="mob-vp-badge mob-vp-urgent">⚡ 3j</div>
+                        </div>
+                        <div
+                          style="
+                            font-size: 11px;
+                            color: var(--text2);
+                            margin-bottom: 8px;
+                            line-height: 1.4;
+                          "
+                        >
+                          Acquisition de 2T d'engrais NPK pour la saison des
+                          pluies. Prix négocié : 125 000 FCFA/T.
+                        </div>
+                        <div class="mob-vp-bar">
+                          <div
+                            class="mob-vp-fill"
+                            style="
+                              width: 74%;
+                              background: linear-gradient(
+                                90deg,
+                                #0f6e50,
+                                #2dd4a0
+                              );
+                            "
+                          ></div>
+                        </div>
+                        <div class="mob-vp-stats">
+                          <span style="color: var(--g3); font-weight: 600"
+                            >74% Pour (94)</span
+                          ><span>26% Contre (33)</span>
+                        </div>
+                        <div
+                          style="
+                            font-size: 10px;
+                            color: var(--text3);
+                            margin: 4px 0 8px;
+                          "
+                        >
+                          Quorum : 127/127 membres · Seuil : 51%
+                        </div>
+                        <div class="mob-vp-actions">
+                          <button
+                            class="mob-btn-v mb-pour"
+                            onclick="mobVote(this, 'pour')"
+                          >
+                            ✓ Voter Pour
+                          </button>
+                          <button
+                            class="mob-btn-v mb-contre"
+                            onclick="mobVote(this, 'contre')"
+                          >
+                            ✗ Voter Contre
+                          </button>
+                        </div>
+                      </div>
+                      <div class="mob-vote-pill" style="margin: 0">
+                        <div class="mob-vp-head">
+                          <div class="mob-vp-title">
+                            Admission de 5 nouveaux membres
+                          </div>
+                          <div class="mob-vp-badge mob-vp-ok">7j</div>
+                        </div>
+                        <div
+                          style="
+                            font-size: 11px;
+                            color: var(--text2);
+                            margin-bottom: 8px;
+                            line-height: 1.4;
+                          "
+                        >
+                          Amina T., Koffi M., Sena K., Dzifa A., Mawuli A. ont
+                          payé la cotisation d'entrée.
+                        </div>
+                        <div class="mob-vp-bar">
+                          <div
+                            class="mob-vp-fill"
+                            style="
+                              width: 88%;
+                              background: linear-gradient(
+                                90deg,
+                                #0f6e50,
+                                #2dd4a0
+                              );
+                            "
+                          ></div>
+                        </div>
+                        <div class="mob-vp-stats">
+                          <span style="color: var(--g3); font-weight: 600"
+                            >88% Pour (112)</span
+                          ><span>12% Contre (15)</span>
+                        </div>
+                        <div class="mob-vp-actions">
+                          <button class="mob-btn-v mb-voted">
+                            ✓ Vous avez voté Pour
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Screen 4 : Profil -->
+                <div class="mobile-screen" id="mob-profil">
+                  <div
+                    class="mob-topbar"
+                    style="justify-content: flex-start; gap: 10px"
+                  >
+                    <button
+                      onclick="showMobScreen('mob-home')"
+                      style="
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        font-size: 13px;
+                        font-weight: 500;
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                      "
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        width="12"
+                        height="12"
+                      >
+                        <polyline points="15 18 9 12 15 6" />
+                      </svg>
+                      Retour
+                    </button>
+                    <div class="mob-logo" style="font-size: 14px">
+                      Mon profil
+                    </div>
+                  </div>
+                  <div class="mob-content">
+                    <div
+                      style="
+                        background: linear-gradient(
+                          135deg,
+                          var(--g0),
+                          var(--g2)
+                        );
+                        padding: 1.5rem;
+                        text-align: center;
+                        color: white;
+                      "
+                    >
+                      <div
+                        style="
+                          width: 60px;
+                          height: 60px;
+                          background: var(--g3);
+                          border-radius: 50%;
+                          margin: 0 auto 10px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-family: var(--display);
+                          font-size: 22px;
+                          font-weight: 700;
+                          color: white;
+                        "
+                      >
+                        KA
+                      </div>
+                      <div
+                        style="
+                          font-family: var(--display);
+                          font-size: 17px;
+                          font-weight: 700;
+                        "
+                      >
+                        Kofi AMEVOR
+                      </div>
+                      <div
+                        style="
+                          font-size: 11px;
+                          color: rgba(255, 255, 255, 0.5);
+                          margin-bottom: 8px;
+                        "
+                      >
+                        Trésorier · Coopérative Agri-Kara
+                      </div>
+                      <div
+                        style="
+                          display: inline-flex;
+                          align-items: center;
+                          gap: 4px;
+                          background: rgba(255, 255, 255, 0.1);
+                          color: var(--g5);
+                          font-size: 10px;
+                          padding: 3px 10px;
+                          border-radius: 20px;
+                        "
+                      >
+                        <div
+                          class="live-dot"
+                          style="width: 6px; height: 6px"
+                        ></div>
+                        Clé blockchain active
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        padding: 10px 14px;
+                        border-bottom: 0.5px solid var(--border);
+                        background: var(--surface);
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                      "
+                    >
+                      <span style="font-size: 16px">🔑</span>
+                      <div>
+                        <div
+                          style="
+                            font-size: 10px;
+                            color: var(--text3);
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                          "
+                        >
+                          Clé publique
+                        </div>
+                        <div
+                          style="
+                            font-size: 12px;
+                            font-weight: 500;
+                            font-family: var(--mono);
+                            color: var(--text);
+                          "
+                        >
+                          0x8f3a...b2d1
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        padding: 10px 14px;
+                        border-bottom: 0.5px solid var(--border);
+                        background: var(--surface);
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                      "
+                    >
+                      <span style="font-size: 16px">✅</span>
+                      <div>
+                        <div
+                          style="
+                            font-size: 10px;
+                            color: var(--text3);
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                          "
+                        >
+                          Votes effectués
+                        </div>
+                        <div
+                          style="
+                            font-size: 12px;
+                            font-weight: 500;
+                            color: var(--text);
+                          "
+                        >
+                          23 votes · 100% participation
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        padding: 10px 14px;
+                        border-bottom: 0.5px solid var(--border);
+                        background: var(--surface);
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                      "
+                    >
+                      <span style="font-size: 16px">📋</span>
+                      <div>
+                        <div
+                          style="
+                            font-size: 10px;
+                            color: var(--text3);
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                          "
+                        >
+                          Transactions signées
+                        </div>
+                        <div
+                          style="
+                            font-size: 12px;
+                            font-weight: 500;
+                            color: var(--text);
+                          "
+                        >
+                          47 transactions
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        padding: 10px 14px;
+                        border-bottom: 0.5px solid var(--border);
+                        background: var(--surface);
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                      "
+                    >
+                      <span style="font-size: 16px">📅</span>
+                      <div>
+                        <div
+                          style="
+                            font-size: 10px;
+                            color: var(--text3);
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                          "
+                        >
+                          Membre depuis
+                        </div>
+                        <div
+                          style="
+                            font-size: 12px;
+                            font-weight: 500;
+                            color: var(--text);
+                          "
+                        >
+                          Mars 2019 · 7 ans
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        padding: 10px 14px;
+                        background: var(--surface);
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                      "
+                    >
+                      <span style="font-size: 16px">⭐</span>
+                      <div>
+                        <div
+                          style="
+                            font-size: 10px;
+                            color: var(--text3);
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                          "
+                        >
+                          Statut
+                        </div>
+                        <div
+                          style="
+                            font-size: 12px;
+                            font-weight: 500;
+                            color: var(--text);
+                          "
+                        >
+                          Trésorier actif
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /phone-screen -->
+            </div>
+            <!-- /phone-frame -->
+            <div class="screen-dots">
+              <div
+                class="screen-dot active"
+                onclick="
+                  showMobScreen('mob-home');
+                  updateDots(0);
+                "
+              ></div>
+              <div
+                class="screen-dot"
+                onclick="
+                  showMobScreen('mob-history');
+                  updateDots(1);
+                "
+              ></div>
+              <div
+                class="screen-dot"
+                onclick="
+                  showMobScreen('mob-vote');
+                  updateDots(2);
+                "
+              ></div>
+              <div
+                class="screen-dot"
+                onclick="
+                  showMobScreen('mob-profil');
+                  updateDots(3);
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+        <!-- /phone-wrap -->
+
+        <!-- Feature list -->
+        <div class="feature-list">
+          <div
+            class="feature-item highlighted"
+            onclick="
+              showMobScreen('mob-home');
+              updateDots(0);
+            "
+          >
+            <div class="fi-icon" style="background: var(--g-pale)">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#0f6e50"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+            </div>
+            <div>
+              <div class="fi-title">Tableau de bord membre</div>
+              <div class="fi-desc">
+                Solde en temps réel, votes actifs et dernières transactions
+                directement sur l'écran d'accueil. Mis à jour à chaque nouveau
+                bloc blockchain.
+              </div>
+              <span
+                class="fi-tag"
+                style="background: var(--g-pale); color: var(--g2)"
+                >Écran 1</span
+              >
+              <button
+                class="show-screen-btn"
+                onclick="
+                  event.stopPropagation();
+                  showMobScreen('mob-home');
+                  updateDots(0);
+                "
+              >
+                Voir l'écran →
+              </button>
+            </div>
+          </div>
+          <div
+            class="feature-item"
+            onclick="
+              showMobScreen('mob-history');
+              updateDots(1);
+            "
+          >
+            <div class="fi-icon" style="background: #edf4ff">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2d7dd2"
+                stroke-width="2"
+              >
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+                <line x1="3" y1="6" x2="3.01" y2="6" />
+              </svg>
+            </div>
+            <div>
+              <div class="fi-title">Historique vérifiable</div>
+              <div class="fi-desc">
+                Chaque transaction affiche son hash blockchain. N'importe quel
+                membre peut vérifier l'authenticité d'une entrée sur la chaîne
+                publique.
+              </div>
+              <span class="fi-tag" style="background: #edf4ff; color: #2d7dd2"
+                >Écran 2</span
+              >
+              <button
+                class="show-screen-btn"
+                onclick="
+                  event.stopPropagation();
+                  showMobScreen('mob-history');
+                  updateDots(1);
+                "
+              >
+                Voir l'écran →
+              </button>
+            </div>
+          </div>
+          <div
+            class="feature-item"
+            onclick="
+              showMobScreen('mob-vote');
+              updateDots(2);
+            "
+          >
+            <div class="fi-icon" style="background: var(--purple-pale)">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#5b4fcf"
+                stroke-width="2"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+              </svg>
+            </div>
+            <div>
+              <div class="fi-title">Vote depuis le téléphone</div>
+              <div class="fi-desc">
+                Chaque membre vote directement depuis son mobile. Le vote est
+                signé avec sa clé privée et enregistré sur la blockchain en
+                quelques secondes.
+              </div>
+              <span
+                class="fi-tag"
+                style="background: var(--purple-pale); color: var(--purple)"
+                >Écran 3</span
+              >
+              <button
+                class="show-screen-btn"
+                onclick="
+                  event.stopPropagation();
+                  showMobScreen('mob-vote');
+                  updateDots(2);
+                "
+              >
+                Voir l'écran →
+              </button>
+            </div>
+          </div>
+          <div
+            class="feature-item"
+            onclick="
+              showMobScreen('mob-profil');
+              updateDots(3);
+            "
+          >
+            <div class="fi-icon" style="background: var(--amber-pale)">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#d4960f"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div>
+              <div class="fi-title">Identité blockchain du membre</div>
+              <div class="fi-desc">
+                Chaque membre possède une clé cryptographique unique. Son
+                historique de votes et de signatures est permanent et vérifiable
+                sur la chaîne.
+              </div>
+              <span
+                class="fi-tag"
+                style="background: var(--amber-pale); color: var(--amber)"
+                >Écran 4</span
+              >
+              <button
+                class="show-screen-btn"
+                onclick="
+                  event.stopPropagation();
+                  showMobScreen('mob-profil');
+                  updateDots(3);
+                "
+              >
+                Voir l'écran →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ SECTION DÉMO LIVE ══════════════ -->
+    <div class="page-section" id="sec-demo">
+      <div class="demo-layout">
+        <div class="demo-intro">
+          <h2>Démonstration Live — Transaction → Blockchain</h2>
+          <p>
+            Entrez une transaction et observez en temps réel comment elle est
+            validée, propagée et ancrée sur la blockchain de CoopLedger.
+          </p>
+        </div>
+
+        <!-- Steps bar -->
+        <div class="steps-bar" id="steps-bar">
+          <div class="step" id="step-1">
+            <div class="step-num">1</div>
+            <div class="step-info">
+              <div class="step-title">Saisie</div>
+              <div class="step-sub">Transaction créée</div>
+            </div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" id="step-2">
+            <div class="step-num">2</div>
+            <div class="step-info">
+              <div class="step-title">Signature</div>
+              <div class="step-sub">Clé privée</div>
+            </div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" id="step-3">
+            <div class="step-num">3</div>
+            <div class="step-info">
+              <div class="step-title">Broadcast</div>
+              <div class="step-sub">Réseau</div>
+            </div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" id="step-4">
+            <div class="step-num">4</div>
+            <div class="step-info">
+              <div class="step-title">Consensus</div>
+              <div class="step-sub">5 noeuds</div>
+            </div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" id="step-5">
+            <div class="step-num">5</div>
+            <div class="step-info">
+              <div class="step-title">Ancré</div>
+              <div class="step-sub">Immuable</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-grid">
+          <!-- Input panel -->
+          <div class="demo-panel">
+            <div class="dp-header">
+              <div class="dp-header-icon" style="background: var(--g-pale)">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#0f6e50"
+                  stroke-width="2"
+                  width="18"
+                  height="18"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </div>
+              <div>
+                <div class="dp-title">Nouvelle transaction</div>
+                <div class="dp-sub">Trésorier · Coopérative Agri-Kara</div>
+              </div>
+            </div>
+            <div class="dp-body">
+              <div class="form-group">
+                <label class="form-label">Type</label>
+                <div class="type-btns">
+                  <button
+                    class="type-btn t-in"
+                    id="demo-btn-in"
+                    onclick="setDemoType('in')"
+                  >
+                    ↑ Entrée
+                  </button>
+                  <button
+                    class="type-btn"
+                    id="demo-btn-out"
+                    onclick="setDemoType('out')"
+                  >
+                    ↓ Sortie
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description</label>
+                <input
+                  class="form-input"
+                  id="demo-desc"
+                  placeholder="Ex: Cotisation mensuelle — 127 membres"
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Montant (FCFA)</label>
+                  <input
+                    class="form-input"
+                    id="demo-amount"
+                    type="number"
+                    placeholder="0"
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Catégorie</label>
+                  <select class="form-select" id="demo-cat">
+                    <option>Cotisation</option>
+                    <option>Intrants</option>
+                    <option>Primes</option>
+                    <option>Frais</option>
+                    <option>Subvention</option>
+                    <option>Transport</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn-broadcast" id="demo-btn" onclick="runDemo()">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                Signer & Diffuser sur la blockchain
+              </button>
+
+              <!-- TX preview -->
+              <div
+                id="tx-preview"
+                style="
+                  display: none;
+                  margin-top: 1rem;
+                  background: #f4f3ef;
+                  border-radius: var(--r);
+                  padding: 10px 12px;
+                  border: 0.5px solid var(--border);
+                "
+              >
+                <div
+                  style="
+                    font-size: 10px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.07em;
+                    color: var(--text3);
+                    font-weight: 600;
+                    margin-bottom: 6px;
+                  "
+                >
+                  Transaction signée
+                </div>
+                <pre
+                  id="tx-preview-content"
+                  style="
+                    font-family: var(--mono);
+                    font-size: 10px;
+                    color: var(--g2);
+                    line-height: 1.7;
+                    white-space: pre-wrap;
+                  "
+                ></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blockchain panel -->
+          <div class="chain-panel">
+            <div class="chain-panel-head">
+              <div class="cp-title">Réseau Blockchain — CoopLedger PoA</div>
+              <div class="cp-sub">5 noeuds validateurs · Hyperledger Besu</div>
+            </div>
+            <div class="chain-panel-body">
+              <!-- Blocks chain -->
+              <div
+                style="
+                  font-size: 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.07em;
+                  color: rgba(255, 255, 255, 0.3);
+                  font-weight: 600;
+                  margin-bottom: 8px;
+                "
+              >
+                Chaîne de blocs
+              </div>
+              <div class="blocks-scroll" id="blocks-scroll"></div>
+
+              <!-- Nodes -->
+              <div
+                style="
+                  font-size: 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.07em;
+                  color: rgba(255, 255, 255, 0.3);
+                  font-weight: 600;
+                  margin-bottom: 8px;
+                "
+              >
+                Noeuds validateurs
+              </div>
+              <div class="nodes-grid">
+                <div class="node" id="node-0">
+                  <div class="node-icon">🖥</div>
+                  <div class="node-name">Lomé-01</div>
+                  <div class="node-status ns-active" id="ns-0">Actif</div>
+                </div>
+                <div class="node" id="node-1">
+                  <div class="node-icon">🖥</div>
+                  <div class="node-name">Kara-02</div>
+                  <div class="node-status ns-active" id="ns-1">Actif</div>
+                </div>
+                <div class="node" id="node-2">
+                  <div class="node-icon">🖥</div>
+                  <div class="node-name">Sokodé-03</div>
+                  <div class="node-status ns-active" id="ns-2">Actif</div>
+                </div>
+                <div class="node" id="node-3">
+                  <div class="node-icon">🖥</div>
+                  <div class="node-name">Atakpamé-04</div>
+                  <div class="node-status ns-active" id="ns-3">Actif</div>
+                </div>
+                <div class="node" id="node-4">
+                  <div class="node-icon">🖥</div>
+                  <div class="node-name">Dapaong-05</div>
+                  <div class="node-status ns-active" id="ns-4">Actif</div>
+                </div>
+              </div>
+
+              <!-- Propagation details -->
+              <div
+                style="
+                  font-size: 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.07em;
+                  color: rgba(255, 255, 255, 0.3);
+                  font-weight: 600;
+                  margin-bottom: 8px;
+                "
+              >
+                Détails de propagation
+              </div>
+              <div class="prop-row" id="prop-row">
+                <div class="prop-item" id="pr-hash">
+                  <div class="prop-label">Hash SHA-256</div>
+                  <div class="prop-val" id="pv-hash">En attente...</div>
+                  <div class="prop-check">✅</div>
+                </div>
+                <div class="prop-item" id="pr-sig">
+                  <div class="prop-label">Signature</div>
+                  <div class="prop-val" id="pv-sig">En attente...</div>
+                  <div class="prop-check">✅</div>
+                </div>
+                <div class="prop-item" id="pr-block">
+                  <div class="prop-label">Numéro de bloc</div>
+                  <div class="prop-val" id="pv-block">En attente...</div>
+                  <div class="prop-check">✅</div>
+                </div>
+                <div class="prop-item" id="pr-conf">
+                  <div class="prop-label">Confirmations</div>
+                  <div class="prop-val" id="pv-conf">0 / 5</div>
+                  <div class="prop-check">✅</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live feed -->
+        <div class="live-feed-section">
+          <div class="lf-header">
+            <div class="lf-title">
+              <div class="live-dot"></div>
+              Propagation en temps réel — Tous les membres voient la transaction
+            </div>
+            <div class="lf-members" id="lf-members"></div>
+          </div>
+          <div class="lf-body" id="lf-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+      <div class="toast-header">
+        <div class="toast-dot"></div>
+        <div class="toast-title" id="toast-title"></div>
+      </div>
+      <div class="toast-body" id="toast-body"></div>
+      <div class="toast-hash" id="toast-hash"></div>
+    </div>
+
+    <script>
+      // ── PAGE SECTIONS ──────────────────────────────────────────
+      function showSection(id, btn) {
+        document
+          .querySelectorAll(".page-section")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".ph-tab")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById("sec-" + id).classList.add("active");
+        btn.classList.add("active");
+      }
+
+      // ── MOBILE SCREENS ─────────────────────────────────────────
+      function showMobScreen(id) {
+        document
+          .querySelectorAll(".mobile-screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        const screenMap = {
+          "mob-home": 0,
+          "mob-history": 1,
+          "mob-vote": 2,
+          "mob-profil": 3,
+        };
+        updateDots(screenMap[id] ?? 0);
+      }
+
+      function updateDots(activeIdx) {
+        document
+          .querySelectorAll(".screen-dot")
+          .forEach((d, i) => d.classList.toggle("active", i === activeIdx));
+      }
+
+      function mobVote(btn, choice) {
+        const pill = btn.closest(".mob-vote-pill");
+        const actions = pill.querySelector(".mob-vp-actions");
+        actions.innerHTML = `<button class="mob-btn-v mb-voted">✓ Voté ${choice === "pour" ? "Pour" : "Contre"}</button>`;
+        showToast(
+          "Vote enregistré !",
+          "Signé et ancré sur la blockchain",
+          "0x" + Math.random().toString(16).slice(2, 10),
+        );
+      }
+
+      // ── DEMO STATE ─────────────────────────────────────────────
+      let demoType = "in";
+      let blockNum = 1847;
+      let demoRunning = false;
+
+      const members = [
+        { name: "Kofi A.", initials: "KA", color: "#0f6e50", balance: 842500 },
+        { name: "Amina T.", initials: "AT", color: "#5b4fcf", balance: 12000 },
+        { name: "Koffi M.", initials: "KM", color: "#e8603a", balance: 8500 },
+        { name: "Sena K.", initials: "SK", color: "#2d7dd2", balance: 15000 },
+        { name: "Dzifa A.", initials: "DA", color: "#d4960f", balance: 9200 },
+        { name: "Mawuli A.", initials: "MA", color: "#18a373", balance: 11000 },
+        { name: "Abla K.", initials: "AK", color: "#8b4fcf", balance: 7800 },
+        { name: "Yao D.", initials: "YD", color: "#d63c3c", balance: 13500 },
+      ];
+
+      function setDemoType(t) {
+        demoType = t;
+        document.getElementById("demo-btn-in").className =
+          "type-btn" + (t === "in" ? " t-in" : "");
+        document.getElementById("demo-btn-out").className =
+          "type-btn" + (t === "out" ? " t-out" : "");
+      }
+
+      // ── INIT BLOCKS ────────────────────────────────────────────
+      function initBlocks() {
+        const scroll = document.getElementById("blocks-scroll");
+        const blocks = [];
+        for (let i = blockNum - 5; i <= blockNum; i++) {
+          blocks.push({
+            num: i,
+            hash:
+              "0x" +
+              Math.random().toString(16).slice(2, 6) +
+              "..." +
+              Math.random().toString(16).slice(2, 6),
+            txs: Math.floor(Math.random() * 4) + 1,
+            time: `${Math.floor(Math.random() * 20) + 1}s`,
+          });
+        }
+        scroll.innerHTML = blocks
+          .map(
+            (b, i) => `
+    ${i > 0 ? '<div class="bc-arrow">→</div>' : ""}
+    <div class="block-chip">
+      <div class="bc-num">Bloc #${b.num}</div>
+      <div class="bc-hash">${b.hash}</div>
+      <div class="bc-txcount">${b.txs} transaction${b.txs > 1 ? "s" : ""}</div>
+      <div class="bc-time">il y a ${b.time}</div>
+    </div>
+  `,
+          )
+          .join("");
+        scroll.scrollLeft = scroll.scrollWidth;
+      }
+
+      // ── INIT MEMBERS ───────────────────────────────────────────
+      function initMembers() {
+        // Avatars
+        document.getElementById("lf-members").innerHTML =
+          members
+            .slice(0, 5)
+            .map(
+              (m) =>
+                `<div class="lf-member" style="background:${m.color}" title="${m.name}">${m.initials}</div>`,
+            )
+            .join("") +
+          `<span style="font-size:11px;color:var(--text3);margin-left:6px">+${members.length - 5} autres</span>`;
+
+        // Member tiles
+        document.getElementById("lf-body").innerHTML = members
+          .map(
+            (m, i) => `
+    <div class="member-tile" id="mt-${i}">
+      <div class="mt-av" style="background:${m.color}">${m.initials}</div>
+      <div class="mt-info">
+        <div class="mt-name">${m.name}</div>
+        <div class="mt-status" id="mt-status-${i}">Synchronisé · Bloc #${blockNum}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="mt-balance" id="mt-bal-${i}">${m.balance.toLocaleString("fr-FR")} FCFA</div>
+        <div class="mt-sync synced" id="mt-sync-${i}">✓ Synchro</div>
+      </div>
+    </div>
+  `,
+          )
+          .join("");
+      }
+
+      // ── DEMO SEQUENCE ──────────────────────────────────────────
+      async function runDemo() {
+        if (demoRunning) return;
+        const desc =
+          document.getElementById("demo-desc").value.trim() ||
+          "Cotisation mensuelle — 127 membres";
+        const amount =
+          parseInt(document.getElementById("demo-amount").value) || 127000;
+        const cat = document.getElementById("demo-cat").value;
+
+        demoRunning = true;
+        const btn = document.getElementById("demo-btn");
+        btn.classList.add("loading");
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Traitement en cours...`;
+
+        resetSteps();
+        resetNodes();
+        resetProps();
+
+        const hash =
+          "0x" +
+          Array.from({ length: 8 }, () =>
+            Math.floor(Math.random() * 16).toString(16),
+          ).join("") +
+          "..." +
+          Array.from({ length: 4 }, () =>
+            Math.floor(Math.random() * 16).toString(16),
+          ).join("");
+        const sig =
+          "0x" +
+          Array.from({ length: 8 }, () =>
+            Math.floor(Math.random() * 16).toString(16),
+          ).join("") +
+          "...";
+        blockNum++;
+
+        // STEP 1 — Saisie
+        activateStep(1);
+        await wait(600);
+
+        // Show TX preview
+        const txObj = {
+          tx_id: hash,
+          coop_id: "COOP-KARA-007",
+          type: demoType === "in" ? "ENTREE" : "SORTIE",
+          categorie: cat,
+          montant: amount,
+          devise: "FCFA",
+          description: desc,
+          date: new Date().toISOString().slice(0, 19) + "Z",
+        };
+        document.getElementById("tx-preview").style.display = "block";
+        document.getElementById("tx-preview-content").textContent =
+          JSON.stringify(txObj, null, 2);
+
+        // STEP 2 — Signature
+        await wait(800);
+        doneStep(1);
+        activateStep(2);
+        document.getElementById("pv-sig").textContent = sig;
+        document.getElementById("pv-sig").classList.add("highlight");
+        document.getElementById("pr-sig").classList.add("done");
+        await wait(900);
+
+        // STEP 3 — Broadcast
+        doneStep(2);
+        activateStep(3);
+        document.getElementById("pv-hash").textContent = hash;
+        document.getElementById("pv-hash").classList.add("highlight");
+        document.getElementById("pr-hash").classList.add("done");
+        // Animate nodes receiving
+        for (let i = 0; i < 5; i++) {
+          await wait(220);
+          const node = document.getElementById(`node-${i}`);
+          const ns = document.getElementById(`ns-${i}`);
+          node.classList.add("validating");
+          ns.textContent = "Reçu";
+          ns.className = "node-status ns-validating";
+        }
+        await wait(500);
+
+        // STEP 4 — Consensus
+        doneStep(3);
+        activateStep(4);
+        let confs = 0;
+        for (let i = 0; i < 5; i++) {
+          await wait(300);
+          const node = document.getElementById(`node-${i}`);
+          const ns = document.getElementById(`ns-${i}`);
+          node.classList.remove("validating");
+          node.classList.add("validated");
+          ns.textContent = "Validé ✓";
+          ns.className = "node-status ns-validated";
+          confs++;
+          document.getElementById("pv-conf").textContent = `${confs} / 5`;
+          if (confs === 5) {
+            document.getElementById("pr-conf").classList.add("done");
+            document.getElementById("pv-conf").classList.add("highlight");
+          }
+        }
+        await wait(500);
+
+        // STEP 5 — Ancré
+        doneStep(4);
+        activateStep(5);
+        document.getElementById("pv-block").textContent = `#${blockNum}`;
+        document.getElementById("pv-block").classList.add("highlight");
+        document.getElementById("pr-block").classList.add("done");
+
+        // Add new block to chain
+        const scroll = document.getElementById("blocks-scroll");
+        const arrow = document.createElement("div");
+        arrow.className = "bc-arrow";
+        arrow.textContent = "→";
+        const chip = document.createElement("div");
+        chip.className = "block-chip new-block";
+        chip.innerHTML = `
+    <div class="bc-num">Bloc #${blockNum}</div>
+    <div class="bc-hash">${hash}</div>
+    <div class="bc-txcount">1 transaction</div>
+    <div class="bc-time">maintenant</div>
+  `;
+        scroll.appendChild(arrow);
+        scroll.appendChild(chip);
+        scroll.scrollLeft = scroll.scrollWidth;
+        await wait(600);
+
+        // PROPAGATE TO MEMBERS
+        doneStep(5);
+        for (let i = 0; i < members.length; i++) {
+          await wait(180);
+          const tile = document.getElementById(`mt-${i}`);
+          const statusEl = document.getElementById(`mt-status-${i}`);
+          const syncEl = document.getElementById(`mt-sync-${i}`);
+          const balEl = document.getElementById(`mt-bal-${i}`);
+          syncEl.className = "mt-sync syncing";
+          syncEl.textContent = "⟳ Synchronisation...";
+          statusEl.textContent = `Reçoit Bloc #${blockNum}...`;
+          tile.classList.add("updated");
+          setTimeout(() => {
+            syncEl.className = "mt-sync synced";
+            syncEl.textContent = "✓ Synchronisé";
+            statusEl.textContent = `Synchronisé · Bloc #${blockNum}`;
+            if (i === 0) {
+              const delta = demoType === "in" ? amount : -amount;
+              members[0].balance += delta;
+              balEl.textContent =
+                members[0].balance.toLocaleString("fr-FR") + " FCFA";
+            }
+          }, 800);
+        }
+
+        await wait(1500);
+
+        // Show toast
+        showToast(
+          `Transaction ancrée — Bloc #${blockNum}`,
+          `Visible par les 127 membres en temps réel`,
+          hash,
+        );
+
+        // Reset button
+        btn.classList.remove("loading");
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Signer & Diffuser sur la blockchain`;
+        demoRunning = false;
+      }
+
+      // ── HELPERS ────────────────────────────────────────────────
+      function wait(ms) {
+        return new Promise((r) => setTimeout(r, ms));
+      }
+
+      function resetSteps() {
+        for (let i = 1; i <= 5; i++) {
+          const s = document.getElementById(`step-${i}`);
+          s.classList.remove("done", "active");
+        }
+      }
+
+      function activateStep(n) {
+        const s = document.getElementById(`step-${n}`);
+        s.classList.add("active");
+      }
+
+      function doneStep(n) {
+        const s = document.getElementById(`step-${n}`);
+        s.classList.remove("active");
+        s.classList.add("done");
+      }
+
+      function resetNodes() {
+        for (let i = 0; i < 5; i++) {
+          const node = document.getElementById(`node-${i}`);
+          const ns = document.getElementById(`ns-${i}`);
+          node.classList.remove("validating", "validated");
+          ns.textContent = "Actif";
+          ns.className = "node-status ns-active";
+        }
+      }
+
+      function resetProps() {
+        ["pr-hash", "pr-sig", "pr-block", "pr-conf"].forEach((id) => {
+          document.getElementById(id).classList.remove("done");
+        });
+        ["pv-hash", "pv-sig", "pv-block", "pv-conf"].forEach((id) => {
+          const el = document.getElementById(id);
+          el.classList.remove("highlight");
+          el.textContent = id === "pv-conf" ? "0 / 5" : "En attente...";
+        });
+        document.getElementById("tx-preview").style.display = "none";
+      }
+
+      function showToast(title, body, hash) {
+        const toast = document.getElementById("toast");
+        document.getElementById("toast-title").textContent = title;
+        document.getElementById("toast-body").textContent = body;
+        document.getElementById("toast-hash").textContent = hash || "";
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 5000);
+      }
+
+      // ── INIT ───────────────────────────────────────────────────
+      initBlocks();
+      initMembers();
+    </script>
+  </body>
+</html>
