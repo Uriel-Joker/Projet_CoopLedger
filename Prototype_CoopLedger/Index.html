@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoopLedger — Application</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="CoopLedger_App.css" />
+  </head>
+  <body>
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <span class="logo-text">Coop<span>Ledger</span></span>
+      </div>
+
+      <div class="sidebar-coop">
+        <div class="coop-name">Coopérative Agri-Kara</div>
+        <div class="coop-sub">Région de Kara · 127 membres</div>
+        <div class="coop-status">
+          <div class="status-dot"></div>
+          <span class="status-text" id="sidebar-chain-status">Blockchain active</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Principal</div>
+        <div class="nav-item active" id="nav-dashboard" onclick="navigateTo('dashboard', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          Tableau de bord
+        </div>
+        <div class="nav-item" id="nav-transactions" onclick="navigateTo('transactions', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+          Transactions
+        </div>
+        <div class="nav-item" id="nav-vote" onclick="navigateTo('vote', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Votes
+          <span class="nav-badge" id="vote-badge">2</span>
+        </div>
+        <div class="nav-item" id="nav-rapport" onclick="navigateTo('rapport', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>
+          </svg>
+          Rapports
+        </div>
+
+        <div class="nav-label">Gestion</div>
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          Membres
+        </div>
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Audit blockchain
+        </div>
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+          </svg>
+          Paramètres
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="member-avatar">KA</div>
+        <div>
+          <div class="member-name">Kofi Amevor</div>
+          <div class="member-role">Trésorier</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==================== MAIN ==================== -->
+    <main class="main">
+
+      <!-- ===== PAGE DASHBOARD ===== -->
+      <div id="page-dashboard" class="page active">
+        <div class="topbar">
+          <div class="topbar-title">Tableau de bord</div>
+          <div class="topbar-right">
+            <span class="topbar-date" id="topbar-date"></span>
+            <button class="btn-action" onclick="openAddTx()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Nouvelle transaction
+            </button>
+          </div>
+        </div>
+        <div class="content">
+          <!-- Rapport bar -->
+          <div class="rapport-bar">
+            <div class="rapport-left">
+              <div class="rapport-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="8" y1="13" x2="16" y2="13"/>
+                </svg>
+              </div>
+              <div>
+                <div class="rapport-title">Rapport mensuel automatique</div>
+                <div class="rapport-sub">Généré depuis les données blockchain · Partagé avec tous les membres</div>
+              </div>
+            </div>
+            <div class="rapport-months">
+              <button class="month-btn">Mars 2026</button>
+              <button class="month-btn active">Avril 2026</button>
+              <button class="month-btn" onclick="showDashToast('rapport')">Télécharger PDF</button>
+            </div>
+          </div>
+
+          <!-- Metrics -->
+          <div class="metrics-row">
+            <div class="metric-card mc-green">
+              <div class="metric-label">Solde actuel</div>
+              <div class="metric-value" id="solde-val">842 500</div>
+              <div class="metric-sub">FCFA · Mis à jour en temps réel</div>
+              <div class="metric-delta delta-up">↑ +12.4% ce mois</div>
+            </div>
+            <div class="metric-card mc-orange">
+              <div class="metric-label">Dépenses du mois</div>
+              <div class="metric-value">320 000</div>
+              <div class="metric-sub">FCFA · Avril 2026</div>
+              <div class="metric-delta delta-down">↑ +8.1% vs mars</div>
+            </div>
+            <div class="metric-card mc-purple">
+              <div class="metric-label">Recettes du mois</div>
+              <div class="metric-value">967 000</div>
+              <div class="metric-sub">FCFA · Avril 2026</div>
+              <div class="metric-delta delta-up">↑ +22.3% vs mars</div>
+            </div>
+            <div class="metric-card mc-amber" style="cursor:pointer" onclick="navigateTo('vote', document.getElementById('nav-vote'))">
+              <div class="metric-label">Votes en attente</div>
+              <div class="metric-value" style="color:var(--amber)">2</div>
+              <div class="metric-sub">Cliquez pour participer →</div>
+              <div class="metric-delta delta-up" style="background:var(--amber-pale);color:var(--amber)">⚡ Urgent</div>
+            </div>
+          </div>
+
+          <!-- Charts row -->
+          <div class="charts-row">
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title">Flux financiers — 6 derniers mois</div>
+                <div class="chart-period">
+                  <button class="period-btn" onclick="setPeriod(this,'3m')">3M</button>
+                  <button class="period-btn active" onclick="setPeriod(this,'6m')">6M</button>
+                  <button class="period-btn" onclick="setPeriod(this,'1a')">1A</button>
+                </div>
+              </div>
+              <div class="chart-svg-wrap">
+                <svg id="bar-chart" viewBox="0 0 600 180" preserveAspectRatio="none"></svg>
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title">Répartition dépenses</div>
+              </div>
+              <div class="donut-wrap">
+                <div class="donut-svg-wrap">
+                  <svg viewBox="0 0 160 160" id="donut-svg"></svg>
+                  <div class="donut-center">
+                    <div class="donut-center-val">320k</div>
+                    <div class="donut-center-lbl">Total FCFA</div>
+                  </div>
+                </div>
+                <div class="donut-legend" id="donut-legend"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom row -->
+          <div class="bottom-row">
+            <div class="tx-card">
+              <div class="tx-card-header">
+                <div class="tx-card-title">Historique des transactions</div>
+                <div class="tx-filters">
+                  <button class="filter-btn active" onclick="filterTx('all',this)">Toutes</button>
+                  <button class="filter-btn" onclick="filterTx('in',this)">Entrées</button>
+                  <button class="filter-btn" onclick="filterTx('out',this)">Sorties</button>
+                </div>
+              </div>
+              <div class="tx-table">
+                <div class="tx-table-head">
+                  <span>Transaction</span><span>Catégorie</span><span>Date</span><span style="text-align:right">Montant</span>
+                </div>
+                <div id="tx-body"></div>
+              </div>
+              <div class="tx-pagination">
+                <span class="pag-info" id="pag-info">Affichage 1–8 sur 24 transactions</span>
+                <div class="pag-btns">
+                  <button class="pag-btn" onclick="changePage(-1)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                  </button>
+                  <button class="pag-btn active" id="pag-1" onclick="goPage(1)">1</button>
+                  <button class="pag-btn" id="pag-2" onclick="goPage(2)">2</button>
+                  <button class="pag-btn" id="pag-3" onclick="goPage(3)">3</button>
+                  <button class="pag-btn" onclick="changePage(1)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add transaction -->
+            <div class="add-panel">
+              <div class="add-panel-header">
+                <div class="add-panel-title">Enregistrer une transaction</div>
+                <div class="add-panel-sub">Sera signé et ancré sur la blockchain</div>
+              </div>
+              <div class="add-panel-body">
+                <div class="form-group">
+                  <label class="form-label">Type</label>
+                  <div class="tx-type-btns">
+                    <button class="type-btn active-in" id="btn-in" onclick="setType('in')">↑ Entrée</button>
+                    <button class="type-btn" id="btn-out" onclick="setType('out')">↓ Sortie</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Description</label>
+                  <input class="form-input" id="tx-desc" placeholder="Ex: Cotisation mensuelle"/>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Montant (FCFA)</label>
+                    <input class="form-input" id="tx-amount" type="number" placeholder="0"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Catégorie</label>
+                    <select class="form-select" id="tx-cat">
+                      <option value="Cotisation">Cotisation</option>
+                      <option value="Intrants">Intrants</option>
+                      <option value="Primes">Primes</option>
+                      <option value="Frais">Frais</option>
+                      <option value="Subvention">Subvention</option>
+                      <option value="Transport">Transport</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Bénéficiaire / Source</label>
+                  <input class="form-input" id="tx-benef" placeholder="Nom ou organisation"/>
+                </div>
+                <button class="btn-submit" onclick="submitTx()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                  Signer & Ancrer sur la blockchain
+                </button>
+                <div class="chain-status">
+                  <div class="chain-row" style="margin-bottom:4px">
+                    <span class="chain-label">Dernier bloc</span>
+                    <span class="chain-val" id="chain-block">#1847</span>
+                  </div>
+                  <div class="chain-row" style="margin-bottom:4px">
+                    <span class="chain-label">Dernier hash</span>
+                    <span class="chain-val" id="chain-hash">0x4a3f...c12e</span>
+                  </div>
+                  <div class="chain-row">
+                    <span class="chain-label">Noeuds actifs</span>
+                    <span class="chain-val">5 / 5</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE VOTE ===== -->
+      <div id="page-vote" class="page">
+        <div class="topbar">
+          <div class="topbar-title">Votes &amp; Gouvernance</div>
+          <div class="topbar-right">
+            <button class="btn-primary" onclick="openNewVote()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Nouvelle proposition
+            </button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="vote-stats-row">
+            <div class="vstat vs-green">
+              <div class="vstat-lbl">Votes actifs</div>
+              <div class="vstat-val" id="stat-actifs">2</div>
+              <div class="vstat-sub">En attente de participation</div>
+            </div>
+            <div class="vstat vs-purple">
+              <div class="vstat-lbl">Taux de participation</div>
+              <div class="vstat-val">78%</div>
+              <div class="vstat-sub">99 / 127 membres ont voté</div>
+            </div>
+            <div class="vstat vs-amber">
+              <div class="vstat-lbl">Propositions ce mois</div>
+              <div class="vstat-val" id="stat-total">5</div>
+              <div class="vstat-sub">Avril 2026</div>
+            </div>
+            <div class="vstat vs-blue">
+              <div class="vstat-lbl">Smart contracts</div>
+              <div class="vstat-val">4</div>
+              <div class="vstat-sub">Déployés sur la blockchain</div>
+            </div>
+          </div>
+
+          <div class="vote-grid">
+            <div class="votes-panel">
+              <div class="section-head">
+                <div class="section-title">Propositions</div>
+                <div class="tab-row">
+                  <button class="tab-btn active" onclick="filterVotes('all',this)">Toutes</button>
+                  <button class="tab-btn" onclick="filterVotes('active',this)">Actives</button>
+                  <button class="tab-btn" onclick="filterVotes('closed',this)">Clôturées</button>
+                </div>
+              </div>
+              <div id="votes-container"></div>
+            </div>
+
+            <div class="sc-panel">
+              <div class="sc-card">
+                <div class="sc-card-head">
+                  <div class="sc-card-title">VoteManager — Smart Contract</div>
+                  <div class="sc-card-sub">Déployé sur Hyperledger Besu · PoA</div>
+                </div>
+                <div class="sc-card-body">
+                  <div class="sc-row"><span class="sc-label">Adresse contrat</span><span class="sc-val">0x7f3a...d4c2</span></div>
+                  <div class="sc-row"><span class="sc-label">Bloc déploiement</span><span class="sc-val">#1201</span></div>
+                  <div class="sc-row"><span class="sc-label">Propositions actives</span><span class="sc-val-white" id="sc-active">2</span></div>
+                  <div class="sc-row"><span class="sc-label">Votes enregistrés</span><span class="sc-val-white" id="sc-votes">247</span></div>
+                  <div class="sc-row"><span class="sc-label">Noeuds validateurs</span><span class="sc-val">5 / 5 actifs</span></div>
+                  <div class="sc-row"><span class="sc-label">Dernier bloc</span><span class="sc-val" id="sc-block">#1847</span></div>
+                </div>
+              </div>
+
+              <div class="sc-card">
+                <div class="sc-card-head">
+                  <div class="sc-card-title">Journal blockchain live</div>
+                  <div class="sc-card-sub">Événements en temps réel</div>
+                </div>
+                <div class="sc-card-body">
+                  <div class="sc-log" id="sc-log"></div>
+                </div>
+              </div>
+
+              <div class="new-vote-card">
+                <div class="nv-header">
+                  <div class="nv-title">Soumettre une proposition</div>
+                  <div class="nv-sub">Déploie un smart contract de vote</div>
+                </div>
+                <div class="nv-body">
+                  <div class="form-group">
+                    <label class="form-label">Intitulé de la proposition</label>
+                    <input class="form-input" id="nv-title" placeholder="Ex: Achat groupé d'engrais"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="nv-desc" rows="2" placeholder="Détails de la proposition..."></textarea>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Montant (FCFA)</label>
+                      <input class="form-input" id="nv-amount" type="number" placeholder="0"/>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Catégorie</label>
+                      <select class="form-select" id="nv-cat">
+                        <option>Intrants</option><option>Investissement</option>
+                        <option>Formation</option><option>Infrastructure</option>
+                        <option>Distribution</option><option>Autre</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Durée du vote</label>
+                    <select class="form-select" id="nv-duration">
+                      <option>3 jours</option><option>5 jours</option>
+                      <option>7 jours</option><option>14 jours</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Seuil d'approbation</label>
+                    <div class="threshold-row">
+                      <input type="range" class="threshold-slider" id="nv-threshold" min="50" max="80" value="51" oninput="updateThreshold(this.value)"/>
+                      <span class="threshold-val" id="threshold-display">51%</span>
+                    </div>
+                  </div>
+                  <button class="btn-deploy" onclick="deployVote()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Déployer le smart contract
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE TRANSACTIONS (placeholder) ===== -->
+      <div id="page-transactions" class="page">
+        <div class="topbar">
+          <div class="topbar-title">Transactions</div>
+        </div>
+        <div class="content">
+          <div class="tx-card">
+            <div class="tx-card-header">
+              <div class="tx-card-title">Historique des transactions</div>
+              <div class="tx-filters">
+                <button class="filter-btn active" onclick="filterTx('all',this)">Toutes</button>
+                <button class="filter-btn" onclick="filterTx('in',this)">Entrées</button>
+                <button class="filter-btn" onclick="filterTx('out',this)">Sorties</button>
+              </div>
+            </div>
+            <div class="tx-table">
+              <div class="tx-table-head">
+                <span>Transaction</span><span>Catégorie</span><span>Date</span><span style="text-align:right">Montant</span>
+              </div>
+              <div id="tx-body-full"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE RAPPORT (placeholder) ===== -->
+      <div id="page-rapport" class="page">
+        <div class="topbar">
+          <div class="topbar-title">Rapports</div>
+        </div>
+        <div class="content">
+          <div class="rapport-bar">
+            <div class="rapport-left">
+              <div class="rapport-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="8" y1="13" x2="16" y2="13"/>
+                </svg>
+              </div>
+              <div>
+                <div class="rapport-title">Rapport mensuel automatique</div>
+                <div class="rapport-sub">Généré depuis les données blockchain</div>
+              </div>
+            </div>
+            <div class="rapport-months">
+              <button class="month-btn">Mars 2026</button>
+              <button class="month-btn active">Avril 2026</button>
+              <button class="month-btn" onclick="showDashToast('rapport')">Télécharger PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Modal confirmation vote -->
+    <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+      <div class="modal" id="modal-box">
+        <div class="modal-icon" id="modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="modal-icon-svg"></svg>
+        </div>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-sub" id="modal-sub"></div>
+        <div class="modal-prop" id="modal-prop"></div>
+        <div class="modal-sign">
+          <div class="modal-sign-row"><span class="modal-sign-lbl">Membre</span><span class="modal-sign-val">Kofi Amevor (Trésorier)</span></div>
+          <div class="modal-sign-row"><span class="modal-sign-lbl">Clé publique</span><span class="modal-sign-val">0x8f3a...b2d1</span></div>
+          <div class="modal-sign-row"><span class="modal-sign-lbl">Signature</span><span class="modal-sign-val" id="modal-sig">En attente...</span></div>
+        </div>
+        <div class="modal-btns">
+          <button class="modal-btn-cancel" onclick="closeModal()">Annuler</button>
+          <button class="modal-btn-confirm-pour" id="modal-confirm" onclick="confirmVote()">Confirmer le vote</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+      <div class="toast-header">
+        <div class="toast-dot td-green" id="toast-dot"></div>
+        <div class="toast-title" id="toast-title"></div>
+      </div>
+      <div class="toast-body" id="toast-body"></div>
+      <div class="toast-hash" id="toast-hash"></div>
+    </div>
+
+    <script>
+      // ═══════════════════════════════════════════════════════════════════════
+      // NAVIGATION
+      // ═══════════════════════════════════════════════════════════════════════
+      function navigateTo(page, navEl) {
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        // Show target
+        document.getElementById('page-' + page).classList.add('active');
+        // Update nav
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        if (navEl) navEl.classList.add('active');
+        // Update sidebar chain status text
+        const statusText = document.getElementById('sidebar-chain-status');
+        if (page === 'vote') {
+          statusText.textContent = 'Smart contract actif';
+          // Init vote page if needed
+          if (!votePageInited) { initVotePage(); votePageInited = true; }
+        } else {
+          statusText.textContent = 'Blockchain active';
+        }
+        // Scroll to top
+        document.querySelector('.main').scrollTo(0, 0);
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // SHARED STATE
+      // ═══════════════════════════════════════════════════════════════════════
+      let blockNum = 1847;
+      let votePageInited = false;
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // DASHBOARD LOGIC
+      // ═══════════════════════════════════════════════════════════════════════
+      const allTransactions = [
+        { id:1, type:"in", name:"Cotisation mensuelle — 127 membres", cat:"Cotisation", date:"17 Avr 2026", amount:127000, hash:"0x4a3f...c12e" },
+        { id:2, type:"out", name:"Achat intrants — Marché de Kara", cat:"Intrants", date:"12 Avr 2026", amount:95000, hash:"0x9b2d...f87a" },
+        { id:3, type:"in", name:"Prime de vente — récolte maïs", cat:"Primes", date:"5 Avr 2026", amount:340000, hash:"0x2e7c...3b51" },
+        { id:4, type:"out", name:"Frais de transport groupé", cat:"Transport", date:"1 Avr 2026", amount:22500, hash:"0x1f4a...7d92" },
+        { id:5, type:"in", name:"Subvention IFAD — Q1 2026", cat:"Subvention", date:"28 Mar 2026", amount:500000, hash:"0x7d3f...8a6c" },
+        { id:6, type:"out", name:"Achat semences certifiées", cat:"Intrants", date:"24 Mar 2026", amount:68000, hash:"0x3c8a...2f1d" },
+        { id:7, type:"in", name:"Cotisation mensuelle — 124 membres", cat:"Cotisation", date:"15 Mar 2026", amount:124000, hash:"0x8e1b...9c4a" },
+        { id:8, type:"out", name:"Formation comptabilité membres", cat:"Frais", date:"10 Mar 2026", amount:35000, hash:"0x5a7d...1e3b" },
+        { id:9, type:"in", name:"Vente groupée sorgho", cat:"Primes", date:"5 Mar 2026", amount:220000, hash:"0x6b2c...4d8f" },
+        { id:10, type:"out", name:"Réparation équipement stockage", cat:"Frais", date:"1 Mar 2026", amount:45000, hash:"0x9f3a...7c2e" },
+        { id:11, type:"in", name:"Cotisation mensuelle — 122 membres", cat:"Cotisation", date:"15 Fév 2026", amount:122000, hash:"0x2d4e...8b1a" },
+        { id:12, type:"out", name:"Achat pesticides bio", cat:"Intrants", date:"8 Fév 2026", amount:52000, hash:"0x7a1f...3c9d" },
+        { id:13, type:"in", name:"Don Ministère Agriculture", cat:"Subvention", date:"3 Fév 2026", amount:150000, hash:"0x4c8b...6e2f" },
+        { id:14, type:"out", name:"Frais de réunion annuelle", cat:"Frais", date:"28 Jan 2026", amount:18000, hash:"0x1e5d...9a4c" },
+        { id:15, type:"in", name:"Prime exportation — coton", cat:"Primes", date:"20 Jan 2026", amount:480000, hash:"0x8b3f...2d7e" },
+        { id:16, type:"out", name:"Achat matériel irrigation", cat:"Intrants", date:"15 Jan 2026", amount:110000, hash:"0x3d7c...5a1b" },
+        { id:17, type:"in", name:"Cotisation mensuelle — 120 membres", cat:"Cotisation", date:"10 Jan 2026", amount:120000, hash:"0x6e4a...8f2c" },
+        { id:18, type:"out", name:"Frais notaire — statuts", cat:"Frais", date:"5 Jan 2026", amount:25000, hash:"0x9c2d...4b7e" },
+        { id:19, type:"in", name:"Remboursement prêt Banque Agricole", cat:"Primes", date:"30 Déc 2025", amount:200000, hash:"0x1a5f...3e8c" },
+        { id:20, type:"out", name:"Transport récolte décembre", cat:"Transport", date:"20 Déc 2025", amount:38000, hash:"0x7b2e...9d4a" },
+        { id:21, type:"in", name:"Subvention BAD — agriculture durable", cat:"Subvention", date:"15 Déc 2025", amount:750000, hash:"0x4f8c...2a6d" },
+        { id:22, type:"out", name:"Achat engrais NPK — décembre", cat:"Intrants", date:"10 Déc 2025", amount:88000, hash:"0x2c6a...7f1b" },
+        { id:23, type:"in", name:"Prime vente igname", cat:"Primes", date:"5 Déc 2025", amount:310000, hash:"0x5e1d...8c3f" },
+        { id:24, type:"out", name:"Formation digital — membres", cat:"Frais", date:"1 Déc 2025", amount:42000, hash:"0x3a7b...5e9c" },
+      ];
+
+      const catColors = {
+        Cotisation:"cat-cotis", Intrants:"cat-intrants", Primes:"cat-primes",
+        Frais:"cat-frais", Subvention:"cat-subvention", Transport:"cat-transport"
+      };
+
+      let currentFilter = "all";
+      let currentPage = 1;
+      const perPage = 8;
+      let txType = "in";
+
+      document.getElementById("topbar-date").textContent = new Date().toLocaleDateString("fr-FR", {
+        weekday:"long", day:"numeric", month:"long", year:"numeric"
+      });
+
+      function getFiltered() {
+        if (currentFilter === "in") return allTransactions.filter(t => t.type === "in");
+        if (currentFilter === "out") return allTransactions.filter(t => t.type === "out");
+        return allTransactions;
+      }
+
+      function renderTx() {
+        const filtered = getFiltered();
+        const total = filtered.length;
+        const start = (currentPage - 1) * perPage;
+        const slice = filtered.slice(start, start + perPage);
+        document.getElementById("pag-info").textContent =
+          `Affichage ${start+1}–${Math.min(start+perPage,total)} sur ${total} transactions`;
+        const body = document.getElementById("tx-body");
+        body.innerHTML = slice.map((tx,i) => `
+          <div class="tx-row" style="animation-delay:${i*0.04}s">
+            <div class="tx-info-wrap">
+              <div class="tx-icon ${tx.type==="in"?"ti-in":"ti-out"}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  ${tx.type==="in"
+                    ? '<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>'
+                    : '<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>'}
+                </svg>
+              </div>
+              <div>
+                <div class="tx-name">${tx.name}</div>
+                <div class="tx-hash">${tx.hash}</div>
+              </div>
+            </div>
+            <div><span class="tx-cat ${catColors[tx.cat]}">${tx.cat}</span></div>
+            <div class="tx-date">${tx.date}</div>
+            <div class="tx-amount ${tx.type==="in"?"amount-in":"amount-out"}">
+              ${tx.type==="in" ? "+" : "−"}${tx.amount.toLocaleString("fr-FR")} FCFA
+            </div>
+          </div>
+        `).join("");
+        const pages = Math.ceil(total / perPage);
+        for (let i = 1; i <= 3; i++) {
+          const btn = document.getElementById(`pag-${i}`);
+          if (btn) { btn.classList.toggle("active", i === currentPage); btn.style.display = i <= pages ? "" : "none"; }
+        }
+      }
+
+      function filterTx(f, btn) {
+        currentFilter = f; currentPage = 1;
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderTx();
+      }
+
+      function changePage(d) {
+        const pages = Math.ceil(getFiltered().length / perPage);
+        currentPage = Math.max(1, Math.min(pages, currentPage + d));
+        renderTx();
+      }
+
+      function goPage(p) { currentPage = p; renderTx(); }
+
+      // Bar chart
+      const chartData = {
+        "6m": { labels:["Nov","Déc","Jan","Fév","Mar","Avr"], income:[380000,1260000,600000,272000,844000,967000], expense:[95000,168000,173000,87000,198000,320000] },
+        "3m": { labels:["Fév","Mar","Avr"], income:[272000,844000,967000], expense:[87000,198000,320000] },
+        "1a": { labels:["Mai","Juin","Juil","Aoû","Sep","Oct","Nov","Déc","Jan","Fév","Mar","Avr"], income:[220000,310000,450000,280000,390000,520000,380000,1260000,600000,272000,844000,967000], expense:[80000,90000,110000,75000,130000,145000,95000,168000,173000,87000,198000,320000] }
+      };
+      let currentPeriod = "6m";
+
+      function drawBarChart(period) {
+        const d = chartData[period];
+        const svg = document.getElementById("bar-chart");
+        const W=600,H=180,padL=40,padR=10,padT=10,padB=30;
+        const n = d.labels.length;
+        const maxV = Math.max(...d.income,...d.expense);
+        const xScale = (W-padL-padR)/n;
+        const yScale = (H-padT-padB)/(maxV*1.1);
+        const bW = xScale*0.35;
+        let html = "";
+        [0,0.25,0.5,0.75,1].forEach(t => {
+          const y = H-padB-t*(H-padT-padB);
+          html += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e8e6e0" stroke-width="0.5"/>`;
+          html += `<text x="${padL-4}" y="${y+3}" text-anchor="end" font-size="8" fill="#9a9890">${((t*maxV*1.1)/1000).toFixed(0)}k</text>`;
+        });
+        d.labels.forEach((lbl,i) => {
+          const cx = padL+i*xScale+xScale/2;
+          const incH = d.income[i]*yScale, expH = d.expense[i]*yScale;
+          const incY = H-padB-incH, expY = H-padB-expH;
+          html += `<rect x="${cx-bW-2}" y="${incY}" width="${bW}" height="${incH}" fill="#18a373" rx="3" opacity="0.85"/>`;
+          html += `<rect x="${cx+2}" y="${expY}" width="${bW}" height="${expH}" fill="#e8603a" rx="3" opacity="0.75"/>`;
+          html += `<text x="${cx}" y="${H-4}" text-anchor="middle" font-size="9" fill="#9a9890">${lbl}</text>`;
+        });
+        html += `<rect x="${W-120}" y="4" width="10" height="10" fill="#18a373" rx="2"/>
+                 <text x="${W-106}" y="13" font-size="9" fill="#5a5852">Recettes</text>
+                 <rect x="${W-55}" y="4" width="10" height="10" fill="#e8603a" rx="2"/>
+                 <text x="${W-41}" y="13" font-size="9" fill="#5a5852">Dépenses</text>`;
+        svg.innerHTML = html;
+      }
+
+      function setPeriod(btn, p) {
+        document.querySelectorAll(".period-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentPeriod = p;
+        drawBarChart(p);
+      }
+
+      // Donut
+      const donutData = [
+        {label:"Intrants",pct:40,color:"#18a373"},
+        {label:"Transport",pct:12,color:"#d4960f"},
+        {label:"Frais",pct:18,color:"#5b4fcf"},
+        {label:"Primes",pct:22,color:"#2d7dd2"},
+        {label:"Autres",pct:8,color:"#e8603a"},
+      ];
+
+      function drawDonut() {
+        const svg = document.getElementById("donut-svg");
+        const cx=80,cy=80,r=60,ir=40;
+        let startAngle = -Math.PI/2, paths = "";
+        donutData.forEach(d => {
+          const angle = (d.pct/100)*2*Math.PI;
+          const x1=cx+r*Math.cos(startAngle),y1=cy+r*Math.sin(startAngle);
+          const x2=cx+r*Math.cos(startAngle+angle),y2=cy+r*Math.sin(startAngle+angle);
+          const xi1=cx+ir*Math.cos(startAngle),yi1=cy+ir*Math.sin(startAngle);
+          const xi2=cx+ir*Math.cos(startAngle+angle),yi2=cy+ir*Math.sin(startAngle+angle);
+          const lg = angle>Math.PI?1:0;
+          paths += `<path d="M${xi1},${yi1} L${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} L${xi2},${yi2} A${ir},${ir} 0 ${lg},0 ${xi1},${yi1}" fill="${d.color}" opacity="0.88"/>`;
+          startAngle += angle;
+        });
+        svg.innerHTML = paths;
+        document.getElementById("donut-legend").innerHTML = donutData.map(d => `
+          <div class="legend-row">
+            <div class="legend-left"><div class="legend-swatch" style="background:${d.color}"></div><span>${d.label}</span></div>
+            <span class="legend-pct">${d.pct}%</span>
+          </div>
+        `).join("");
+      }
+
+      function setType(t) {
+        txType = t;
+        document.getElementById("btn-in").className = "type-btn" + (t==="in" ? " active-in" : "");
+        document.getElementById("btn-out").className = "type-btn" + (t==="out" ? " active-out" : "");
+      }
+
+      function submitTx() {
+        const desc = document.getElementById("tx-desc").value.trim();
+        const amount = parseInt(document.getElementById("tx-amount").value) || 0;
+        const cat = document.getElementById("tx-cat").value;
+        const benef = document.getElementById("tx-benef").value.trim();
+        if (!desc || !amount) {
+          document.getElementById("tx-desc").style.borderColor = "#e8603a";
+          document.getElementById("tx-amount").style.borderColor = "#e8603a";
+          return;
+        }
+        document.getElementById("tx-desc").style.borderColor = "";
+        document.getElementById("tx-amount").style.borderColor = "";
+        blockNum++;
+        const hash = "0x"+Math.random().toString(16).slice(2,6)+"..."+Math.random().toString(16).slice(2,6);
+        document.getElementById("chain-block").textContent = `#${blockNum}`;
+        document.getElementById("chain-hash").textContent = hash;
+        const newTx = {
+          id: allTransactions.length+1, type: txType,
+          name: desc+(benef?` — ${benef}`:""), cat, amount,
+          date: new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}),
+          hash
+        };
+        allTransactions.unshift(newTx);
+        const soldeEl = document.getElementById("solde-val");
+        let s = parseInt(soldeEl.textContent.replace(/\s/g,""))||842500;
+        s += txType==="in" ? amount : -amount;
+        soldeEl.textContent = s.toLocaleString("fr-FR");
+        document.getElementById("tx-desc").value = "";
+        document.getElementById("tx-amount").value = "";
+        document.getElementById("tx-benef").value = "";
+        currentPage = 1;
+        renderTx();
+        showToast(`Transaction ancrée sur la blockchain`, `${txType==="in"?"+":"-"}${amount.toLocaleString("fr-FR")} FCFA · Visible par tous les membres`, hash, "green");
+      }
+
+      function openAddTx() {
+        document.getElementById("tx-desc").focus();
+        document.getElementById("tx-desc").scrollIntoView({behavior:"smooth",block:"center"});
+      }
+
+      function showDashToast(type) {
+        if (type === "vote") {
+          showToast("2 votes en attente de votre participation", "Cliquez sur Votes dans le menu pour participer", "", "green");
+        } else if (type === "rapport") {
+          showToast("Rapport Avril 2026 généré", "PDF ancré sur la blockchain et partagé avec les membres", "0x"+Math.random().toString(16).slice(2,10)+"...", "green");
+        }
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // VOTE PAGE LOGIC
+      // ═══════════════════════════════════════════════════════════════════════
+      let scVotes = 247;
+      let currentVoteId = null;
+      let currentVoteChoice = null;
+      let voteFilter = "all";
+
+      const voters = [
+        {initials:"KA",color:"#0f6e50"},{initials:"MB",color:"#5b4fcf"},
+        {initials:"AK",color:"#e8603a"},{initials:"YD",color:"#2d7dd2"},
+        {initials:"FT",color:"#d4960f"},
+      ];
+
+      const votes = [
+        { id:1, status:"active", urgent:true, title:"Achat groupé d'engrais NPK — Saison 2026", desc:"Acquisition de 2 tonnes d'engrais NPK auprès du fournisseur AgriPlus pour la saison des pluies. Prix négocié à 125 000 FCFA/tonne (marché : 160 000 FCFA).", cat:"Intrants", amount:250000, pour:94, contre:33, quorum:127, threshold:51, deadline:"21 Avr 2026", daysLeft:3, voted:false, myVote:null, hash:"0x4a3f...c12e", block:"#1832", voters:[0,1,2,3,4] },
+        { id:2, status:"active", urgent:false, title:"Admission de 5 nouveaux membres", desc:"Intégration de Amina Traoré, Koffi Mensah, Dzifa Ablo, Sena Koku et Mawuli Agbo. Chaque candidat a payé la cotisation d'entrée de 5 000 FCFA.", cat:"Gouvernance", amount:0, pour:112, contre:15, quorum:127, threshold:51, deadline:"25 Avr 2026", daysLeft:7, voted:true, myVote:"pour", hash:"0x9b2d...f87a", block:"#1835", voters:[0,1,2,3,4] },
+        { id:3, status:"closed", result:"approved", title:"Renouvellement du bureau — Mandat 2026", desc:"Reconduction du bureau actuel pour un mandat de 2 ans suite au bilan positif de la saison 2025.", cat:"Gouvernance", amount:0, pour:108, contre:19, quorum:127, threshold:66, deadline:"10 Avr 2026", voted:true, myVote:"pour", hash:"0x2e7c...3b51", block:"#1801", voters:[0,1,2,3,4] },
+        { id:4, status:"closed", result:"approved", title:"Achat d'un hangar de stockage", desc:"Construction d'un hangar de 150m² pour stocker les récoltes et réduire les pertes post-récolte (estimées à 23% actuellement).", cat:"Infrastructure", amount:850000, pour:119, contre:8, quorum:127, threshold:66, deadline:"1 Avr 2026", voted:true, myVote:"pour", hash:"0x1f4a...7d92", block:"#1772", voters:[0,1,2,3,4] },
+        { id:5, status:"closed", result:"rejected", title:"Prêt bancaire de 1 500 000 FCFA", desc:"Souscription d'un prêt auprès de la Banque Agricole du Togo pour financer l'achat de matériel d'irrigation. Taux proposé : 9% sur 24 mois.", cat:"Investissement", amount:1500000, pour:41, contre:86, quorum:127, threshold:66, deadline:"25 Mar 2026", voted:true, myVote:"contre", hash:"0x7d3f...8a6c", block:"#1740", voters:[0,1,2,3,4] },
+      ];
+
+      function initVotePage() {
+        renderVotes();
+        updateStats();
+        initLog();
+        setInterval(simulateLiveVote, 5000);
+      }
+
+      function renderVotes() {
+        const filtered = votes.filter(v => {
+          if (voteFilter === "active") return v.status === "active";
+          if (voteFilter === "closed") return v.status === "closed";
+          return true;
+        });
+        document.getElementById("votes-container").innerHTML = filtered.map((v,idx) => buildVoteCard(v,idx)).join("");
+      }
+
+      function buildVoteCard(v, idx) {
+        const total = v.pour+v.contre;
+        const pctPour = total>0 ? Math.round((v.pour/total)*100) : 0;
+        const quorumPct = Math.round(((v.pour+v.contre)/v.quorum)*100);
+        const badgesHtml = `
+          ${v.status==="active"?`<span class="badge badge-active">● Actif</span>`:""}
+          ${v.urgent?`<span class="badge badge-urgent">⚡ Urgent</span>`:""}
+          ${v.status==="closed"&&v.result==="approved"?`<span class="badge badge-approved">✓ Approuvé</span>`:""}
+          ${v.status==="closed"&&v.result==="rejected"?`<span class="badge badge-rejected">✗ Rejeté</span>`:""}
+          <span class="badge badge-cat">${v.cat}</span>
+          ${v.amount>0?`<span class="badge badge-amount">${v.amount.toLocaleString("fr-FR")} FCFA</span>`:""}
+        `;
+        const votersHtml = v.voters.map(i => `<div class="voter-av" style="background:${voters[i].color}">${voters[i].initials}</div>`).join("") +
+          `<span class="voters-more">+${total-v.voters.length} autres</span>`;
+        const actionsHtml = v.status==="active" ? (v.voted ?
+          `<button class="btn-voted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Voté ${v.myVote==="pour"?"Pour":"Contre"}</button>
+           <span class="vc-deadline ${v.daysLeft<=3?"deadline-urgent":"deadline-ok"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${v.daysLeft}j restants</span>` :
+          `<button class="btn-vote btn-pour" onclick="openModal(${v.id},'pour')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Pour</button>
+           <button class="btn-vote btn-contre" onclick="openModal(${v.id},'contre')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Contre</button>
+           <span class="vc-deadline ${v.daysLeft<=3?"deadline-urgent":"deadline-ok"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${v.daysLeft}j</span>`
+        ) : "";
+        const resultHtml = v.status==="closed" ? `
+          <div class="vc-result result-${v.result}">
+            <div class="result-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              ${v.result==="approved"?'<polyline points="20 6 9 17 4 12"/>':'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'}
+            </svg></div>
+            <div>
+              <div class="result-text">${v.result==="approved"?`<strong>Approuvé</strong>`:`<strong>Rejeté</strong>`} — ${pctPour}% de votes Pour (seuil: ${v.threshold}%)</div>
+              <span class="result-hash">Enregistré ${v.block} · ${v.hash}</span>
+            </div>
+          </div>` : "";
+        return `
+          <div class="vote-card" style="animation-delay:${idx*0.07}s">
+            <div class="vc-header">
+              <div style="flex:1">
+                <div class="vc-badges">${badgesHtml}</div>
+                <div class="vc-title">${v.title}</div>
+                <div class="vc-desc">${v.desc}</div>
+                <div class="vc-meta">
+                  <span class="vc-meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    ${v.status==="active"?`Expire le ${v.deadline}`:`Clôturé le ${v.deadline}`}
+                  </span>
+                  <span class="vc-meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    ${total} votes sur ${v.quorum} membres
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="vc-progress">
+              <div class="prog-labels">
+                <span class="prog-pour">Pour : ${v.pour} (${pctPour}%)</span>
+                <span class="prog-contre">Contre : ${v.contre} (${100-pctPour}%)</span>
+              </div>
+              <div class="prog-track">
+                <div class="prog-fill" style="width:${pctPour}%;background:${pctPour>=v.threshold?"linear-gradient(90deg,#0f6e50,#2dd4a0)":"linear-gradient(90deg,#e8603a,#f5a580)"}"></div>
+              </div>
+              <div class="prog-quorum">
+                <span>Quorum : ${quorumPct}%</span>
+                <div class="quorum-bar"><div class="quorum-fill" style="width:${Math.min(quorumPct,100)}%"></div></div>
+                <span>Seuil : ${v.threshold}%</span>
+              </div>
+            </div>
+            <div class="vc-voters">
+              <div class="voters-title">Derniers votants</div>
+              <div class="voters-avatars">${votersHtml}</div>
+            </div>
+            ${v.status==="active"?`<div class="vc-actions">${actionsHtml}</div>`:""}
+            ${resultHtml}
+          </div>
+        `;
+      }
+
+      function filterVotes(f, btn) {
+        voteFilter = f;
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderVotes();
+      }
+
+      function openModal(id, choice) {
+        const v = votes.find(x => x.id === id);
+        if (!v) return;
+        currentVoteId = id; currentVoteChoice = choice;
+        const icon = document.getElementById("modal-icon");
+        const svg = document.getElementById("modal-icon-svg");
+        const title = document.getElementById("modal-title");
+        const sub = document.getElementById("modal-sub");
+        const prop = document.getElementById("modal-prop");
+        const sig = document.getElementById("modal-sig");
+        const btn = document.getElementById("modal-confirm");
+        icon.className = `modal-icon mi-${choice}`;
+        if (choice === "pour") {
+          svg.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+          title.textContent = "Voter Pour"; title.style.color = "var(--g2)";
+          btn.className = "modal-btn-confirm-pour"; btn.textContent = "Confirmer — Voter Pour";
+        } else {
+          svg.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+          title.textContent = "Voter Contre"; title.style.color = "var(--orange)";
+          btn.className = "modal-btn-confirm-contre"; btn.textContent = "Confirmer — Voter Contre";
+        }
+        sub.textContent = "Votre vote sera signé cryptographiquement et enregistré de façon permanente sur la blockchain.";
+        prop.textContent = v.title + (v.amount>0 ? ` — ${v.amount.toLocaleString("fr-FR")} FCFA` : "");
+        sig.textContent = "Génération...";
+        setTimeout(() => {
+          sig.textContent = "0x"+Math.random().toString(16).slice(2,10)+"..."+Math.random().toString(16).slice(2,6);
+        }, 600);
+        document.getElementById("modal").classList.add("show");
+      }
+
+      function closeModal(e) {
+        if (!e || e.target === document.getElementById("modal")) {
+          document.getElementById("modal").classList.remove("show");
+        }
+      }
+
+      function confirmVote() {
+        const v = votes.find(x => x.id === currentVoteId);
+        if (!v) return;
+        if (currentVoteChoice==="pour") v.pour++; else v.contre++;
+        v.voted = true; v.myVote = currentVoteChoice;
+        blockNum++; scVotes++;
+        const hash = "0x"+Math.random().toString(16).slice(2,6)+"..."+Math.random().toString(16).slice(2,6);
+        document.getElementById("modal").classList.remove("show");
+        renderVotes(); updateScStatus();
+        addLog(`[VOTE] Prop #${v.id} → ${currentVoteChoice.toUpperCase()} · Bloc #${blockNum} · ${hash}`, "log-new");
+        showToast("Vote enregistré sur la blockchain",
+          `${currentVoteChoice==="pour"?"✓ Pour":"✗ Contre"} — "${v.title.slice(0,40)}..."`,
+          hash, currentVoteChoice==="pour"?"green":"orange");
+      }
+
+      function openNewVote() {
+        document.getElementById("nv-title").focus();
+        document.getElementById("nv-title").scrollIntoView({behavior:"smooth",block:"center"});
+      }
+
+      function deployVote() {
+        const title = document.getElementById("nv-title").value.trim();
+        const desc = document.getElementById("nv-desc").value.trim();
+        const amount = parseInt(document.getElementById("nv-amount").value)||0;
+        const cat = document.getElementById("nv-cat").value;
+        const thresh = parseInt(document.getElementById("nv-threshold").value);
+        const dur = document.getElementById("nv-duration").value;
+        if (!title) { document.getElementById("nv-title").style.borderColor = "var(--orange)"; return; }
+        document.getElementById("nv-title").style.borderColor = "";
+        const days = parseInt(dur);
+        const dline = new Date(); dline.setDate(dline.getDate()+days);
+        const dlineStr = dline.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
+        const newVote = {
+          id: votes.length+1, status:"active", urgent: days<=3,
+          title, desc: desc||"Proposition soumise par le trésorier.",
+          cat, amount, pour:0, contre:0, quorum:127, threshold:thresh,
+          deadline: dlineStr, daysLeft: days, voted:false, myVote:null,
+          hash: "0x"+Math.random().toString(16).slice(2,6)+"..."+Math.random().toString(16).slice(2,6),
+          block: `#${blockNum+1}`, voters:[]
+        };
+        votes.unshift(newVote); blockNum++;
+        document.getElementById("nv-title").value = "";
+        document.getElementById("nv-desc").value = "";
+        document.getElementById("nv-amount").value = "";
+        updateStats(); renderVotes(); updateScStatus();
+        addLog(`[DEPLOY] VoteManager#${newVote.id} → "${title.slice(0,30)}" · Seuil:${thresh}% · Bloc #${blockNum}`, "log-exec");
+        showToast("Smart contract déployé", `Proposition soumise au vote de 127 membres`, newVote.hash, "purple");
+        // Update badge
+        const badge = document.getElementById("vote-badge");
+        const activeCount = votes.filter(v => v.status==="active").length;
+        badge.textContent = activeCount;
+      }
+
+      function updateScStatus() {
+        const active = votes.filter(v => v.status==="active").length;
+        document.getElementById("sc-active").textContent = active;
+        document.getElementById("sc-votes").textContent = scVotes;
+        document.getElementById("sc-block").textContent = `#${blockNum}`;
+      }
+
+      function updateStats() {
+        const active = votes.filter(v => v.status==="active").length;
+        const total = votes.length;
+        document.getElementById("stat-actifs").textContent = active;
+        document.getElementById("stat-total").textContent = total;
+        const badge = document.getElementById("vote-badge");
+        badge.textContent = active;
+        badge.style.display = active>0 ? "" : "none";
+      }
+
+      const initLogs = [
+        {msg:"[INIT] VoteManager déployé · Bloc #1201",cls:"log-exec"},
+        {msg:'[DEPLOY] Prop #1 "Achat engrais" · Bloc #1832',cls:"log-exec"},
+        {msg:'[DEPLOY] Prop #2 "Admission membres" · Bloc #1835',cls:"log-exec"},
+        {msg:"[VOTE] Prop #1 → POUR · 0x4a3f...c12e · Bloc #1836",cls:"log-new"},
+        {msg:"[VOTE] Prop #1 → POUR · 0x9b2d...f87a · Bloc #1837",cls:"log-new"},
+        {msg:"[VOTE] Prop #2 → POUR · 0x2e7c...3b51 · Bloc #1838",cls:"log-new"},
+        {msg:"[VOTE] Prop #1 → CONTRE · 0x1f4a...7d92 · Bloc #1839",cls:""},
+        {msg:"[CONSENSUS] Bloc #1847 validé par 5/5 noeuds",cls:"log-warn"},
+      ];
+
+      function addLog(msg, cls="") {
+        const log = document.getElementById("sc-log");
+        const entry = document.createElement("span");
+        entry.className = `log-entry ${cls}`;
+        entry.textContent = `${new Date().toLocaleTimeString("fr-FR")} ${msg}`;
+        log.insertBefore(entry, log.firstChild);
+      }
+
+      function initLog() {
+        initLogs.forEach(l => addLog(l.msg, l.cls));
+      }
+
+      function updateThreshold(v) {
+        document.getElementById("threshold-display").textContent = v+"%";
+      }
+
+      const memberNames = ["Amina T.","Koffi M.","Sena K.","Dzifa A.","Mawuli A.","Abla K.","Yao D.","Esi N.","Kwame B.","Afia S."];
+      let feedIdx = 0;
+      function simulateLiveVote() {
+        const activeVotes = votes.filter(v => v.status==="active");
+        if (activeVotes.length===0) return;
+        const v = activeVotes[Math.floor(Math.random()*activeVotes.length)];
+        const choice = Math.random()>0.35 ? "pour" : "contre";
+        const member = memberNames[feedIdx%memberNames.length];
+        feedIdx++;
+        if (choice==="pour") v.pour++; else v.contre++;
+        scVotes++; blockNum++;
+        const hash = "0x"+Math.random().toString(16).slice(2,6)+"..."+Math.random().toString(16).slice(2,6);
+        addLog(`[VOTE] Prop #${v.id} → ${choice.toUpperCase()} (${member}) · Bloc #${blockNum}`, choice==="pour"?"log-new":"");
+        renderVotes(); updateScStatus();
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // SHARED TOAST
+      // ═══════════════════════════════════════════════════════════════════════
+      function showToast(title, body, hash, color="green") {
+        document.getElementById("toast-title").textContent = title;
+        document.getElementById("toast-body").textContent = body;
+        document.getElementById("toast-hash").textContent = hash||"";
+        const dot = document.getElementById("toast-dot");
+        dot.className = `toast-dot td-${color==="purple"?"purple":color==="orange"?"orange":"green"}`;
+        const toast = document.getElementById("toast");
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 4000);
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // INIT
+      // ═══════════════════════════════════════════════════════════════════════
+      renderTx();
+      drawBarChart("6m");
+      drawDonut();
+      // Auto-show vote reminder after 2s
+      setTimeout(() => showDashToast("vote"), 2000);
+    </script>
+  </body>
+</html>
